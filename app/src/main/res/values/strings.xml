@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">CourseMate</string>
+    <string name="app_name">Login</string>
+    <string name="sign_up">Đăng ký</string>
 </resources>
