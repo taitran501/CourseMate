@@ -6,16 +6,7 @@
     android:orientation="vertical">
 
     <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="@string/sign_up"
-        app:titleTextColor="@color/white"
-        app:titleMarginStart="16dp"
-        />
+    <include layout="@layout/toolbar_layout" />
 
     <!-- Container for content with padding -->
     <LinearLayout

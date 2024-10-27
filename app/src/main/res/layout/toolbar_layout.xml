@@ -6,6 +6,6 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     app:navigationIcon="@drawable/ic_arrow_back"
-    app:title="@string/sign_up"
     app:titleTextColor="@color/white"
-    app:titleMarginStart="16dp" />
+    app:titleTextAppearance="@style/ToolbarTitleBold"
+    />
