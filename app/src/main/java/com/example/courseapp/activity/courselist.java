@@ -2,6 +2,7 @@ package com.example.courseapp.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -11,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.courseapp.R;
 import com.example.courseapp.adapter.courseadapter;
@@ -23,6 +25,7 @@ public class courselist extends AppCompatActivity {
     private RecyclerView recyclerView;
     private courseadapter adapter;
     private ArrayList<coursedomain> courseList;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,23 @@ public class courselist extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.recyclerView);
+
+        // Khởi tạo Toolbar và thiết lập làm ActionBar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Thiết lập tiêu đề và nút quay lại trên Toolbar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Đăng ký khoá học");
+        }
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Quay lại activity trước đó
+            }
+        });
 
         // Tạo dữ liệu mẫu cho courseList
         courseList = new ArrayList<>();

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CourseApp</string>
+    <string name="home">Trang chủ</string>
+    <string name="course">Khoá học</string>
+    <string name="profile">Hồ sơ</string>
+    <string name="setting">Cài đặt</string>
 </resources>

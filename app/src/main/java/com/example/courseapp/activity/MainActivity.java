@@ -3,21 +3,24 @@ package com.example.courseapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.courseapp.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ConstraintLayout constraintLayout;
-    private ConstraintLayout constraintLayout2;
-    private ConstraintLayout constraintLayout3;
+    private LinearLayout developingLayout;
+    private LinearLayout designingLayout;
+    private LinearLayout aiAndMLLayout;
+    private LinearLayout exploreLayout;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,38 +29,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Thiết lập padding để tránh đè lên hệ thống thanh
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        View mainView = findViewById(R.id.main);
+        if (mainView != null) {  // Kiểm tra null để tránh lỗi
+            ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
 
-        // Tham chiếu các ConstraintLayout từ layout
-        constraintLayout = findViewById(R.id.constraintLayout);
-        constraintLayout2 = findViewById(R.id.constraintLayout2);
-        constraintLayout3 = findViewById(R.id.constraintLayout3);
+        // Tham chiếu các LinearLayout từ layout
+        developingLayout = findViewById(R.id.developingLayout);
+        designingLayout = findViewById(R.id.designingLayout);
+        aiAndMLLayout = findViewById(R.id.aiAndMLLayout);
+        exploreLayout = findViewById(R.id.exploreLayout);
 
         // Thiết lập sự kiện click để chuyển sang courselist Activity
-        constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCourseList();
-            }
-        });
+        if (developingLayout != null) {
+            developingLayout.setOnClickListener(v -> openCourseList());
+        }
 
-        constraintLayout2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCourseList();
-            }
-        });
+        if (designingLayout != null) {
+            designingLayout.setOnClickListener(v -> openCourseList());
+        }
 
-        constraintLayout3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCourseList();
-            }
-        });
+        if (aiAndMLLayout != null) {
+            aiAndMLLayout.setOnClickListener(v -> openCourseList());
+        }
+
+        if (exploreLayout != null) {
+            exploreLayout.setOnClickListener(v -> openCourseList());
+        }
     }
 
     // Phương thức để mở courselist Activity

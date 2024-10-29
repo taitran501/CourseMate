@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Định nghĩa màu chính cho ứng dụng -->
+    <color name="colorPrimary">#3498DB</color> <!-- Màu xanh chủ đạo -->
+    <color name="colorPrimaryDark">#1565C0</color> <!-- Màu xanh đậm hơn cho các phần tối -->
+    <color name="colorAccent">#64B5F6</color> <!-- Màu xanh nhạt cho nhấn mạnh, đường viền, link -->
+
+    <!-- Màu trắng và đen thường dùng -->
+    <color name="white">#FFFFFF</color> <!-- Màu nền chính -->
+    <color name="black">#000000</color> <!-- Màu đen -->
+
+    <!-- Màu cho các trạng thái nút hoặc thông báo -->
+    <color name="colorError">#B00020</color> <!-- Màu đỏ cho lỗi -->
+    <color name="colorSuccess">#388E3C</color> <!-- Màu xanh lá cây cho thành công -->
+
+    <!-- Màu xám nhạt dùng làm nền hoặc phân chia -->
+    <color name="colorGrayLight">#F5F5F5</color> <!-- Màu xám rất nhạt cho nền input -->
+
+    <!-- Màu văn bản cho chế độ tối và sáng -->
+    <color name="textColorPrimary">#212121</color> <!-- Màu văn bản chính -->
+    <color name="textColorSecondary">#757575</color> <!-- Màu văn bản phụ hoặc mô tả -->
+
+    <!-- Màu cho các liên kết và văn bản nhấn mạnh -->
+    <color name="colorLink">#1E88E5</color> <!-- Màu xanh cho liên kết "Forgot Password?" và "Sign up" -->
 </resources>
