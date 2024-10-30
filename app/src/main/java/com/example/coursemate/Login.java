@@ -88,7 +88,10 @@ public class Login extends AppCompatActivity {
 
         // TODO: Thực hiện logic đăng nhập với backend hoặc cơ sở dữ liệu
 
-        Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(Login.this, OverviewActivity.class);
+        startActivity(intent);
+
+//        Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
         // Chuyển sang Activity tiếp theo nếu cần
     }
 }
