@@ -2,17 +2,13 @@ package com.example.coursemate;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Login extends AppCompatActivity {
 
@@ -26,13 +22,23 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Khởi tạo toolbar và đặt tiêu đề
+        // Khởi tạo Toolbar và thiết lập làm ActionBar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Thiết lập tiêu đề và nút quay lại
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Đăng nhập");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        // Sự kiện click vào nút quay lại (nếu cần)
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         // Khởi tạo các view
         etEmail = findViewById(R.id.etEmail);
@@ -41,73 +47,49 @@ public class Login extends AppCompatActivity {
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
         tvSignUpLink = findViewById(R.id.tvSignUpLink);
 
-        // Sự kiện click vào "Đăng ký ngay"
+        // Xử lý sự kiện khi nhấn vào "Quên mật khẩu"
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Chuyển sang ForgotPassword activity
+                Intent intent = new Intent(Login.this, ForgotPassword.class);
+                startActivity(intent);
+            }
+        });
+
+        // Xử lý sự kiện khi nhấn vào "Đăng ký ngay" (nếu có)
         tvSignUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent intent = new Intent(Login.this, SignUp.class);
                 startActivity(intent);
             }
         });
 
-        // Xử lý sự kiện ẩn/hiện mật khẩu khi chạm vào icon
-        etPassword.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    int drawableEnd = etPassword.getCompoundDrawables()[2] != null ? 2 : -1;
-                    if (drawableEnd != -1 && event.getRawX() >= (etPassword.getRight() - etPassword.getCompoundDrawables()[drawableEnd].getBounds().width())) {
-                        togglePasswordVisibility(etPassword);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-
-        // Sự kiện nhấn nút đăng nhập
+        // Xử lý sự kiện khi nhấn vào nút "Đăng nhập" (nếu có)
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 loginUser();
             }
         });
-
-        // Sự kiện quên mật khẩu
-        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(Login.this, "Password recovery", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
-    // Hàm để ẩn/hiện mật khẩu
-    private void togglePasswordVisibility(EditText passwordField) {
-        if (passwordField.getTransformationMethod() instanceof PasswordTransformationMethod) {
-            passwordField.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            passwordField.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_closed, 0);
-        } else {
-            passwordField.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            passwordField.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_open, 0);
-        }
-        passwordField.setSelection(passwordField.getText().length()); // Để con trỏ ở cuối văn bản
-    }
-
-    // Hàm xử lý đăng nhập người dùng
+    // Phương thức xử lý đăng nhập (nếu cần)
     private void loginUser() {
         String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
+        String password = etPassword.getText().toString();
 
+        // Kiểm tra đầu vào và thực hiện đăng nhập
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // TODO: Xử lý logic đăng nhập với backend (e.g., Firebase, REST API)
+        // TODO: Thực hiện logic đăng nhập với backend hoặc cơ sở dữ liệu
 
-        // Nếu đăng nhập thành công, chuyển tới activity chính
-        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
-        // startActivity(new Intent(Login.this, MainActivity.class));
+        Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+        // Chuyển sang Activity tiếp theo nếu cần
     }
 }
+
