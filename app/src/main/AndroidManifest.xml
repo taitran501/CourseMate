@@ -29,5 +29,6 @@
             android:name=".SignUp"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
     </application>
 </manifest>
