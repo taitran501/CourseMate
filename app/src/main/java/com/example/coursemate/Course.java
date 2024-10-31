@@ -1,13 +1,48 @@
 package com.example.coursemate;
 
-public class Course {
-    private final String name;
-    private final int iconResource;
-    private final String description;  // Thêm thuộc tính mô tả khóa học
-    private final String price;        // Thêm thuộc tính giá khóa học
-    private final String slot;         // Thêm thuộc tính số lượng slot
+import java.util.Date;
 
-    // Constructor cập nhật với các thuộc tính mới
+public class Course {
+    // Thuộc tính từ cả hai lớp
+    private int id;                   // ID khóa học
+    private int teacherId;             // ID giáo viên
+    private String name;               // Tên khóa học
+    private int iconResource;          // Icon khóa học
+    private String description;        // Mô tả khóa học
+    private int maxStudents;           // Số lượng sinh viên tối đa
+    private String status;             // Trạng thái khóa học
+    private Date startDate;            // Ngày bắt đầu
+    private Date endDate;              // Ngày kết thúc
+    private String price;              // Giá khóa học
+    private String slot;               // Số lượng slot
+
+    // Constructor đầy đủ
+    public Course(int id, int teacherId, String name, int iconResource, String description, int maxStudents, String status, Date startDate, Date endDate, String price, String slot) {
+        this.id = id;
+        this.teacherId = teacherId;
+        this.name = name;
+        this.iconResource = iconResource;
+        this.description = description;
+        this.maxStudents = maxStudents;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.price = price;
+        this.slot = slot;
+    }
+
+    // Constructor không có ID (tùy chọn, nếu cần)
+    public Course(int teacherId, String name, String description, int maxStudents, String status, Date startDate, Date endDate) {
+        this.teacherId = teacherId;
+        this.name = name;
+        this.description = description;
+        this.maxStudents = maxStudents;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    // Constructor tối giản (phục vụ trường hợp chỉ có tên và iconResource)
     public Course(String name, int iconResource, String description, String price, String slot) {
         this.name = name;
         this.iconResource = iconResource;
@@ -16,28 +51,92 @@ public class Course {
         this.slot = slot;
     }
 
-    // Getter cho tên khóa học
+    // Getters và Setters cho tất cả các thuộc tính
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(int teacherId) {
+        this.teacherId = teacherId;
+    }
+
     public String getName() {
         return name;
     }
 
-    // Getter cho icon khóa học
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getIconResource() {
         return iconResource;
     }
 
-    // Getter cho mô tả khóa học
+    public void setIconResource(int iconResource) {
+        this.iconResource = iconResource;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    // Getter cho giá khóa học
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getMaxStudents() {
+        return maxStudents;
+    }
+
+    public void setMaxStudents(int maxStudents) {
+        this.maxStudents = maxStudents;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     public String getPrice() {
         return price;
     }
 
-    // Getter cho số lượng slot
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     public String getSlot() {
         return slot;
+    }
+
+    public void setSlot(String slot) {
+        this.slot = slot;
     }
 }
