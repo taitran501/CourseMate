@@ -20,17 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Login"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".SignUp"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".ForgotPassword"
             android:exported="true"
@@ -47,5 +44,13 @@
             android:name=".TeacherDetailActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+      <activity
+            android:name=".CourseDetailActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".CoursePaymentActivity"
+            android:exported="true">
+        </activity>
     </application>
 </manifest>
