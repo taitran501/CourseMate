@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.nha;
 
 
 import android.content.ContentValues;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.example.coursemate.R;
 
 public class EditStudentActivity extends AppCompatActivity {
     private StudentDBHelper dbHelper;
@@ -27,6 +30,19 @@ public class EditStudentActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.edit_email);
         addressEditText = findViewById(R.id.edit_address);
         Button saveButton = findViewById(R.id.save_button);
+
+        // Khởi tạo Toolbar và thiết lập làm ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Thiết lập tiêu đề và nút quay lại
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Chỉnh sửa thông tin");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        // Sự kiện click vào nút quay lại
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         // Lấy thông tin sinh viên từ Intent
         Intent intent = getIntent();

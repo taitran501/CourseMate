@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CourseMate"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -44,7 +45,7 @@
             android:name=".TeacherDetailActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-      <activity
+        <activity
             android:name=".CourseDetailActivity"
             android:exported="true">
         </activity>
@@ -52,5 +53,21 @@
             android:name=".CoursePaymentActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".StudentList"
+            android:exported="true"/>
+        <activity
+            android:name=".StudentLogin"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".nha.AddStudentActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".nha.EditStudentActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".nha.StudentDetailActivity"
+            android:exported="true"/>
     </application>
 </manifest>

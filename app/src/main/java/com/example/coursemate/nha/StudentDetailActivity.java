@@ -1,5 +1,4 @@
-package com.example.coursemate;
-
+package com.example.coursemate.nha;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -8,11 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.util.Log; // Thêm để ghi log nếu cần
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.coursemate.R;
 
 public class StudentDetailActivity extends AppCompatActivity {
     private StudentDBHelper dbHelper;
@@ -34,7 +36,7 @@ public class StudentDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_detail);
+        setContentView(R.layout.activity_student_detail); // Đảm bảo layout đúng
 
         dbHelper = new StudentDBHelper(this);
 
@@ -59,11 +61,17 @@ public class StudentDetailActivity extends AppCompatActivity {
         emailTextView.setText(email);
         addressTextView.setText(address);
 
+        // Thiết lập sự kiện cho các nút
         deleteButton.setOnClickListener(v -> confirmDeleteStudent());
         editButton.setOnClickListener(v -> editStudent());
-        findViewById(R.id.quaylai_button).setOnClickListener(v -> {
-            finish(); // Quay lại Activity trước đó
-        });
+
+        // Tìm và thiết lập sự kiện cho nút Quay lại
+        Button backButton = findViewById(R.id.back_button);
+        if (backButton != null) {
+            backButton.setOnClickListener(v -> {
+                finish(); // Quay lại Activity trước đó
+            });
+        }
     }
 
     private void confirmDeleteStudent() {
@@ -115,4 +123,3 @@ public class StudentDetailActivity extends AppCompatActivity {
         db.close();
     }
 }
-

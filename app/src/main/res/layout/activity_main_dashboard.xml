@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_dashboard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <!-- Nội dung chính của ứng dụng -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <!-- Icon thông báo -->
+            <ImageView
+                android:id="@+id/notification"
+                android:layout_width="37dp"
+                android:layout_height="41dp"
+                android:layout_marginEnd="8dp"
+                app:srcCompat="@drawable/baseline_density_small_24" />
+
+            <!-- Dòng chào người dùng -->
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Xin chào Quang !"
+                android:textSize="34sp"
+                android:includeFontPadding="false"
+                android:layout_gravity="center_vertical" />
+
+            <!-- Hình ảnh avatar của người dùng -->
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/user_1" />
+        </LinearLayout>
+
+        <!-- Mô tả tìm khóa học -->
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Tìm khóa học bạn muốn học"
+            android:textSize="20sp" />
+
+        <!-- Thanh tìm kiếm -->
+        <EditText
+            android:id="@+id/editTextText2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/search_bg"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:hint="Tìm kiếm khóa học"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:singleLine="true" />
+
+        <!-- Tiêu đề danh mục khóa học và liên kết Xem tất cả -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Danh mục"
+                android:textSize="24sp"
+                android:textColor="#141313" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xem tất cả"
+                android:textSize="16sp"
+                android:textColor="#0D31F4" />
+        </LinearLayout>
+
+        <!-- Danh mục khóa học (Lập trình, Thiết kế, Trí tuệ nhân tạo và Máy học, Khám phá) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp">
+
+            <!-- Danh mục Lập trình -->
+            <LinearLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/btn_bg1"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/btn_1" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lập trình"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Danh mục Thiết kế -->
+            <LinearLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/btn_bg1"
+                android:padding="8dp"
+                android:layout_marginStart="8dp">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/btn_2" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thiết kế"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Hàng tiếp theo của danh mục khóa học -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp">
+
+            <!-- Danh mục Trí tuệ nhân tạo và Máy học -->
+            <LinearLayout
+                android:id="@+id/constraintLayout3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/btn_bg1"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/btn_3" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trí tuệ nhân tạo và ML"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Danh mục Khám phá -->
+            <LinearLayout
+                android:id="@+id/constraintLayout4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/btn_bg1"
+                android:padding="8dp"
+                android:layout_marginStart="8dp">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/btn_4" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Khám phá"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- BottomNavigationView cố định ở dưới cùng màn hình -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        android:background="@color/white" />
+</LinearLayout>

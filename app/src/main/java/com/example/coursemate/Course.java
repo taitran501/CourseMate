@@ -139,4 +139,7 @@ public class Course {
     public void setSlot(String slot) {
         this.slot = slot;
     }
+    public String getTitle() {
+        return price;
+    }
 }

@@ -32,13 +32,8 @@ public class Login extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Sự kiện click vào nút quay lại (nếu cần)
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        // Sự kiện click vào nút quay lại
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         // Khởi tạo các view
         etEmail = findViewById(R.id.etEmail);
@@ -47,52 +42,45 @@ public class Login extends AppCompatActivity {
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
         tvSignUpLink = findViewById(R.id.tvSignUpLink);
 
-        // Xử lý sự kiện khi nhấn vào "Quên mật khẩu"
-        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Chuyển sang ForgotPassword activity
-                Intent intent = new Intent(Login.this, ForgotPassword.class);
-                startActivity(intent);
-            }
+        // Sự kiện khi nhấn vào "Quên mật khẩu"
+        tvForgotPassword.setOnClickListener(view -> {
+            Intent intent = new Intent(Login.this, ForgotPassword.class);
+            startActivity(intent);
         });
 
-        // Xử lý sự kiện khi nhấn vào "Đăng ký ngay" (nếu có)
-        tvSignUpLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Login.this, SignUp.class);
-                startActivity(intent);
-            }
+        // Sự kiện khi nhấn vào "Đăng ký ngay"
+        tvSignUpLink.setOnClickListener(view -> {
+            Intent intent = new Intent(Login.this, SignUp.class);
+            startActivity(intent);
         });
 
-        // Xử lý sự kiện khi nhấn vào nút "Đăng nhập" (nếu có)
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loginUser();
-            }
-        });
+        // Sự kiện khi nhấn vào nút "Đăng nhập"
+        btnLogin.setOnClickListener(view -> loginUser());
     }
 
-    // Phương thức xử lý đăng nhập (nếu cần)
+    // Phương thức xử lý đăng nhập
     private void loginUser() {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString();
 
-        // Kiểm tra đầu vào và thực hiện đăng nhập
+        // Kiểm tra đầu vào
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // TODO: Thực hiện logic đăng nhập với backend hoặc cơ sở dữ liệu
-
-        Intent intent = new Intent(Login.this, OverviewActivity.class);
-        startActivity(intent);
-
-//        Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-        // Chuyển sang Activity tiếp theo nếu cần
+        // Kiểm tra tài khoản mẫu
+        if (email.equals("admin") && password.equals("1")) {
+            // Đăng nhập với tài khoản admin, chuyển sang OverviewActivity
+            Intent intent = new Intent(Login.this, OverviewActivity.class);
+            startActivity(intent);
+        } else if (email.equals("student") && password.equals("1")) {
+            // Đăng nhập với tài khoản teacher, chuyển sang MainDashboardActivity
+            Intent intent = new Intent(Login.this, StudentLogin.class);
+            startActivity(intent);
+        } else {
+            // Thông báo lỗi nếu thông tin đăng nhập không hợp lệ
+            Toast.makeText(this, "Thông tin đăng nhập không chính xác", Toast.LENGTH_SHORT).show();
+        }
     }
 }
-

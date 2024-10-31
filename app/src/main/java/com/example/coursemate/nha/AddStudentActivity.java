@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.nha;
 
 
 import android.content.ContentValues;
@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.example.coursemate.R;
 
 import java.util.regex.Pattern;
 
@@ -29,10 +32,19 @@ public class AddStudentActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.email_edit_text);
         addressEditText = findViewById(R.id.address_edit_text);
 
-        // Thêm sự kiện click cho nút quay lại
-        findViewById(R.id.back_button).setOnClickListener(v -> {
-            finish(); // Quay lại Activity trước đó
-        });
+        // Khởi tạo Toolbar và thiết lập làm ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Thiết lập tiêu đề và nút quay lại
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Thêm thông tin");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        // Sự kiện click vào nút quay lại
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
+
         findViewById(R.id.save_button).setOnClickListener(v -> {
             String name = nameEditText.getText().toString();
             String phone = phoneEditText.getText().toString();
@@ -86,6 +98,7 @@ public class AddStudentActivity extends AppCompatActivity {
                 Toast.makeText(this, "Lỗi khi thêm sinh viên", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private boolean isValidName(String name) {

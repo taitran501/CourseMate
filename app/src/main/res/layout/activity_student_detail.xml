@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông Tin Sinh Viên"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:layout_gravity="center" />
+    </androidx.appcompat.widget.Toolbar>
+    <ImageView
+        android:id="@+id/avatar_image_view"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_avatar_placeholder"
+        android:contentDescription="Avatar Image" />
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Xóa sinh viên" />
+    <TextView
+        android:id="@+id/info_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thông tin cá nhân"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/student_detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tên sinh viên"
+        android:textSize="17sp"
+        android:textColor="@color/textColorPrimary" />
+
+    <TextView
+        android:id="@+id/student_detail_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/textColorPrimary"
+        android:text="Số điện thoại" />
+
+    <TextView
+        android:id="@+id/student_detail_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/textColorPrimary"
+        android:text="Email" />
+
+    <TextView
+        android:id="@+id/student_detail_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/textColorPrimary"
+        android:text="Địa chỉ" />
+
+    <Button
+        android:id="@+id/edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Chỉnh sửa thông tin" />
+    <TextView
+        android:id="@+id/course_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thông tin khoá học"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/mot_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/textColorPrimary"
+        android:text="Phát triển ứng dụng trên thiết bị di động - NT118.P13" />
+
+    <TextView
+        android:id="@+id/hai_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/textColorPrimary"
+        android:text="Nhập môn lập trình - IT001.N14" />
+
+    <TextView
+        android:id="@+id/ba_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/textColorPrimary"
+        android:text="Giáo dục thể chất - PE012.N15" />
+    <TextView
+        android:id="@+id/hp_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Học phí"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tt_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/textColorPrimary"
+        android:text="Trạng thái: chưa đóng / đã đóng / không duyệt" />
+    <Button
+        android:id="@+id/duyethp_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Duyệt học phí" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Quay lại" />
+</LinearLayout>

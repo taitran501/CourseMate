@@ -32,7 +32,7 @@ public class TeacherList extends AppCompatActivity {
 
         // Thiết lập tiêu đề và nút quay lại
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Đăng nhập");
+            getSupportActionBar().setTitle("Giáo viên");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 

@@ -24,7 +24,7 @@ public class TeacherDetailActivity extends AppCompatActivity {
 
         // Thiết lập tiêu đề và nút quay lại
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Đăng nhập");
+            getSupportActionBar().setTitle("Thông tin giáo viên");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 

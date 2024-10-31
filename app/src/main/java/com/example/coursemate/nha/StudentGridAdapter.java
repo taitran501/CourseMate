@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.nha;
 
 // StudentGridAdapter.java
 
@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 
+import com.example.coursemate.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class StudentGridAdapter extends BaseAdapter {
     private final Context context;
     private final List<Student> students;
     private final ActivityResultLauncher<Intent> editStudentLauncher;
-
+    
     public StudentGridAdapter(Context context, List<Student> students, ActivityResultLauncher<Intent> editStudentLauncher) {
         this.context = context;
         this.students = students != null ? students : new ArrayList<>();
