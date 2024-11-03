@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.teacher;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.coursemate.RecyclerView.TeacherAdapter;
+import com.example.coursemate.R;
+import com.example.coursemate.model.Teacher;
+import com.example.coursemate.adapter.TeacherAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.coursemate.nha;
+package com.example.coursemate.student;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.util.Log; // Thêm để ghi log nếu cần
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;

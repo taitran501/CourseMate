@@ -1,4 +1,4 @@
-package com.example.coursemate.nha;
+package com.example.coursemate.model;
 
 
 public class Student {

@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.student;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -14,11 +14,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.coursemate.nha.AddStudentActivity;
-import com.example.coursemate.nha.Student;
-import com.example.coursemate.nha.StudentDBHelper;
-import com.example.coursemate.nha.StudentDetailActivity;
-import com.example.coursemate.nha.StudentGridAdapter;
+import com.example.coursemate.R;
+import com.example.coursemate.model.Student;
+import com.example.coursemate.adapter.StudentGridAdapter;
 
 import java.util.ArrayList;
 
@@ -75,6 +73,7 @@ public class StudentList extends AppCompatActivity {
         Button prevButton = findViewById(R.id.prev_button);
         Button nextButton = findViewById(R.id.next_button);
         Button addButton = findViewById(R.id.add_button);
+        Button backButton = findViewById(R.id.back_button1);
 
         adapter = new StudentGridAdapter(this, new ArrayList<>(), editStudentLauncher);
         studentGridView.setAdapter(adapter);
@@ -104,6 +103,10 @@ public class StudentList extends AppCompatActivity {
         addButton.setOnClickListener(v -> {
             Intent intent = new Intent(StudentList.this, AddStudentActivity.class);
             addStudentLauncher.launch(intent); // Sử dụng ActivityResultLauncher
+        });
+
+        backButton.setOnClickListener(v -> {
+            finish(); // Quay lại màn hình trước đó
         });
 
         studentGridView.setOnItemClickListener((parent, view, position, id) -> {

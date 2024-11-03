@@ -50,4 +50,11 @@
     <string name="paymentmethod">Hình thức thanh toán</string>
     <string name="submit_for_pay">THANH TOÁN</string>
     <string name="backtocourselist">Quay lại</string>
+
+    <string-array name="course_status">
+        <item>Mở</item>
+        <item>Đóng</item>
+        <item>Đang diễn ra</item>
+    </string-array>
+
 </resources>

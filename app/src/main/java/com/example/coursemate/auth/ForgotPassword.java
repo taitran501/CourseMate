@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.auth;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.coursemate.R;
 
 public class ForgotPassword extends AppCompatActivity {
 

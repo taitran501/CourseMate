@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.course_mainpage;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.coursemate.R;
 
 public class CourseDetailActivity extends AppCompatActivity {
 

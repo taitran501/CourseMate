@@ -22,15 +22,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Login"
+            android:name=".auth.Login"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".SignUp"
+            android:name=".auth.SignUp"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".ForgotPassword"
+            android:name=".auth.ForgotPassword"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
@@ -38,36 +38,42 @@
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".TeacherList"
+            android:name=".teacher.TeacherList"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".TeacherDetailActivity"
+            android:name=".teacher.TeacherDetailActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".CourseDetailActivity"
+            android:name=".course_mainpage.CourseDetailActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".CoursePaymentActivity"
+            android:name=".course_mainpage.CoursePaymentActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".StudentList"
+            android:name=".student.StudentList"
             android:exported="true"/>
         <activity
-            android:name=".StudentLogin"
+            android:name=".student.StudentLogin"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".nha.AddStudentActivity"
+            android:name=".student.AddStudentActivity"
             android:exported="true"/>
         <activity
-            android:name=".nha.EditStudentActivity"
+            android:name=".student.EditStudentActivity"
             android:exported="true"/>
         <activity
-            android:name=".nha.StudentDetailActivity"
+            android:name=".student.StudentDetailActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".course.AdminCourseListActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".course.CourseDetailActivity"
             android:exported="true"/>
     </application>
 </manifest>

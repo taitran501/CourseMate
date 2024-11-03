@@ -1,23 +1,23 @@
-package com.example.coursemate;
+package com.example.coursemate.model;
 
 import java.util.Date;
 
 public class Course {
-    // Thuộc tính từ cả hai lớp
-    private int id;                   // ID khóa học
-    private int teacherId;             // ID giáo viên
-    private String name;               // Tên khóa học
-    private int iconResource;          // Icon khóa học
-    private String description;        // Mô tả khóa học
-    private int maxStudents;           // Số lượng sinh viên tối đa
-    private String status;             // Trạng thái khóa học
-    private Date startDate;            // Ngày bắt đầu
-    private Date endDate;              // Ngày kết thúc
-    private String price;              // Giá khóa học
-    private String slot;               // Số lượng slot
+    // Thuộc tính của lớp Course
+    private int id;                    // ID khóa học
+    private int teacherId;              // ID giáo viên
+    private String name;                // Tên khóa học
+    private int iconResource;           // Icon khóa học
+    private String description;         // Mô tả khóa học
+    private int maxStudents;            // Số lượng sinh viên tối đa
+    private String status;              // Trạng thái khóa học
+    private Date startDate;             // Ngày bắt đầu
+    private Date endDate;               // Ngày kết thúc
+    private String price;               // Giá khóa học
+    private String slot;                // Số lượng slot
 
-    // Constructor đầy đủ
-    public Course(int id, int teacherId, String name, int iconResource, String description, int maxStudents, String status, Date startDate, Date endDate, String price, String slot) {
+    // Constructor đầy đủ (khớp với tham số truyền từ DatabaseHelper)
+    public Course(int id, int teacherId, String name, int iconResource, String description, int maxStudents, String status, String startDate, String endDate, String price, String slot) {
         this.id = id;
         this.teacherId = teacherId;
         this.name = name;
@@ -25,13 +25,13 @@ public class Course {
         this.description = description;
         this.maxStudents = maxStudents;
         this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = convertStringToDate(startDate); // Chuyển đổi từ String sang Date
+        this.endDate = convertStringToDate(endDate);     // Chuyển đổi từ String sang Date
         this.price = price;
         this.slot = slot;
     }
 
-    // Constructor không có ID (tùy chọn, nếu cần)
+    // Constructor không có ID (nếu cần)
     public Course(int teacherId, String name, String description, int maxStudents, String status, Date startDate, Date endDate) {
         this.teacherId = teacherId;
         this.name = name;
@@ -139,7 +139,18 @@ public class Course {
     public void setSlot(String slot) {
         this.slot = slot;
     }
+
     public String getTitle() {
         return price;
+    }
+
+    // Phương thức để chuyển đổi String thành Date
+    private Date convertStringToDate(String dateString) {
+        try {
+            return new java.text.SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

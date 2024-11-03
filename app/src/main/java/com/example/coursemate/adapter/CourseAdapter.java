@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.coursemate.R;
+import com.example.coursemate.model.Course;
 
 import java.util.ArrayList;
 

@@ -1,14 +1,17 @@
-package com.example.coursemate;
+package com.example.coursemate.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.coursemate.OverviewActivity;
+import com.example.coursemate.R;
+import com.example.coursemate.student.StudentLogin;
 
 public class Login extends AppCompatActivity {
 

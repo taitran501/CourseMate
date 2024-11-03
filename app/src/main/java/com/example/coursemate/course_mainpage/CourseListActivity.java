@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.course_mainpage;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,6 +7,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.coursemate.DatabaseHelper;
+import com.example.coursemate.R;
+import com.example.coursemate.adapter.CourseAdapter;
+import com.example.coursemate.model.Course;
 
 import java.util.ArrayList;
 

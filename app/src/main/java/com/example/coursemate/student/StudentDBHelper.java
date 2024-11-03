@@ -1,4 +1,4 @@
-package com.example.coursemate.nha;
+package com.example.coursemate.student;
 
 
 import android.content.Context;

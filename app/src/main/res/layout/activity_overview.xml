@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="8dp"
-                    android:text="Teacher List"
+                    android:text="Giáo viên"
                     android:textSize="18sp"
                     android:textColor="@android:color/black" />
             </LinearLayout>
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="8dp"
-                    android:text="Course List"
+                    android:text="Khoá học"
                     android:textSize="18sp"
                     android:textColor="@android:color/black" />
             </LinearLayout>
@@ -152,7 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="8dp"
-                    android:text="Student List"
+                    android:text="Học sinh"
                     android:textSize="18sp"
                     android:textColor="@android:color/black" />
             </LinearLayout>

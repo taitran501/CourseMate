@@ -1,7 +1,6 @@
-package com.example.coursemate.nha;
+package com.example.coursemate.adapter;
 
 // StudentGridAdapter.java
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,6 +12,8 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 
 import com.example.coursemate.R;
+import com.example.coursemate.model.Student;
+import com.example.coursemate.student.StudentDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;

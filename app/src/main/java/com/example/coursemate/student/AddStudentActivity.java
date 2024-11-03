@@ -1,4 +1,4 @@
-package com.example.coursemate.nha;
+package com.example.coursemate.student;
 
 
 import android.content.ContentValues;
@@ -107,12 +107,12 @@ public class AddStudentActivity extends AppCompatActivity {
     }
 
     private boolean isValidPhone(String phone) {
-        // Kiểm tra số điện thoại có 11 chữ số và bắt đầu bằng số 0
-        return Pattern.matches("^0\\d{10}$", phone);
+        // Kiểm tra số điện thoại có 10 hoặc 11 chữ số và bắt đầu bằng số 0
+        return Pattern.matches("^0\\d{9,10}$", phone);
     }
 
     private boolean isValidEmail(String email) {
-        // Kiểm tra email có đuôi gmail.com
-        return email.endsWith("@gmail.com");
+        // Kiểm tra định dạng email chuẩn
+        return Pattern.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", email);
     }
 }

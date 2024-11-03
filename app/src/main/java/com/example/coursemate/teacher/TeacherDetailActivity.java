@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.teacher;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.coursemate.R;
 
 public class TeacherDetailActivity extends AppCompatActivity {
     private Toolbar toolbar;

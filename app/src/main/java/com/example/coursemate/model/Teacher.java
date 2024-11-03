@@ -1,4 +1,4 @@
-package com.example.coursemate;
+package com.example.coursemate.model;
 
 public class Teacher {
     private String name;

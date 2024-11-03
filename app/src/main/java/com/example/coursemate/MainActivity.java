@@ -12,6 +12,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.coursemate.auth.Login;
+import com.example.coursemate.model.Course;
+import com.example.coursemate.adapter.CourseAdapter;
+import com.example.coursemate.course_mainpage.CourseDetailActivity;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements CourseAdapter.OnCourseClickListener {
