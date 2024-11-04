@@ -57,7 +57,7 @@
             android:name=".student.StudentList"
             android:exported="true"/>
         <activity
-            android:name=".student.StudentLogin"
+            android:name=".student.StudentDashboardActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
@@ -74,6 +74,9 @@
             android:exported="true"/>
         <activity
             android:name=".course.CourseDetailActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".teacher.TeacherDashboardActivity"
             android:exported="true"/>
     </application>
 </manifest>

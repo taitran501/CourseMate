@@ -72,12 +72,28 @@
                 android:textStyle="bold"
                 android:layout_marginTop="8dp" />
 
-            <EditText
-                android:id="@+id/editTextStartDate"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ngày bắt đầu (yyyy-MM-dd)"
-                android:inputType="date" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/editTextStartDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ngày bắt đầu (dd-MM-yyyy)"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+                <ImageView
+                    android:id="@+id/iconStartDate"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_calendar_month_24"
+                    android:contentDescription="Chọn ngày" />
+            </RelativeLayout>
 
             <!-- Ngày kết thúc -->
             <TextView
@@ -87,12 +103,29 @@
                 android:textStyle="bold"
                 android:layout_marginTop="8dp" />
 
-            <EditText
-                android:id="@+id/editTextEndDate"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ngày kết thúc (yyyy-MM-dd)"
-                android:inputType="date" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/editTextEndDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ngày kết thúc (dd-MM-yyyy)"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+                <ImageView
+                    android:id="@+id/iconEndDate"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_calendar_month_24"
+                    android:contentDescription="Chọn ngày" />
+            </RelativeLayout>
+
 
             <!-- Trạng thái khóa học -->
             <TextView
