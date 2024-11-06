@@ -7,9 +7,9 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.coursemate.R;
+import com.example.coursemate.teacher.TeacherCourseListActivity;
 /*
 import com.example.coursemate.teacher.activities.AssignmentManagementActivity;
-import com.example.coursemate.teacher.activities.CourseListActivity;
 import com.example.coursemate.teacher.activities.ScheduleActivity;
 import com.example.coursemate.teacher.activities.NotificationActivity;
 import com.example.coursemate.teacher.activities.RegistrationManagementActivity;
@@ -31,10 +31,21 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         layoutRegistrations = findViewById(R.id.layoutRegistrations);
 
         // Thiết lập các sự kiện click cho từng chức năng
+
+        layoutCourses.setOnClickListener(view -> {
+            Intent intent = new Intent(TeacherDashboardActivity.this, TeacherCourseListActivity.class);
+            startActivity(intent);
+        });
         /*
-        layoutCourses.setOnClickListener(view -> startActivity(new Intent(TeacherDashboardActivity.this, CourseListActivity.class)));
-        layoutSchedule.setOnClickListener(view -> startActivity(new Intent(TeacherDashboardActivity.this, ScheduleActivity.class)));
-        layoutAssignments.setOnClickListener(view -> startActivity(new Intent(TeacherDashboardActivity.this, AssignmentManagementActivity.class)));
+        layoutSchedule.setOnClickListener(view -> {
+            Intent intent = new Intent(TeacherDashboardActivity.this, TeacherScheduleActivity.class);
+            startActivity(intent);
+        });
+        layoutSchedule.setOnClickListener(view -> {
+            Intent intent = new Intent(TeacherDashboardActivity.this, TeacherAssignmentManagementActivity.class);
+            startActivity(intent);
+        });
+        /*
         layoutNotifications.setOnClickListener(view -> startActivity(new Intent(TeacherDashboardActivity.this, NotificationActivity.class)));
         layoutRegistrations.setOnClickListener(view -> startActivity(new Intent(TeacherDashboardActivity.this, RegistrationManagementActivity.class)));
          */

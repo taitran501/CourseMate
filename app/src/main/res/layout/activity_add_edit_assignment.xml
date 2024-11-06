@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutAddEditAssignment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etAssignmentTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tiêu đề Bài tập"
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/etAssignmentDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mô tả Bài tập"
+            android:inputType="textMultiLine"
+            android:padding="12dp"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="16dp"
+            android:lines="4"
+            android:gravity="top"/>
+
+        <EditText
+            android:id="@+id/etAssignmentDeadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Deadline"
+            android:focusable="false"
+            android:clickable="true"
+            android:padding="12dp"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnSaveAssignment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lưu"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="#ffffff"
+            android:padding="12dp"/>
+
+    </LinearLayout>
+</ScrollView>

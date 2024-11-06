@@ -47,7 +47,7 @@ public class StudentGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.student_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_student, parent, false);
         }
 
         Student student = students.get(position);
