@@ -81,14 +81,5 @@
         <activity
             android:name=".teacher.TeacherCourseListActivity"
             android:exported="true"/>
-        <activity
-            android:name=".teacher.TeacherScheduleActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".teacher.TeacherAssignmentManagementActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".teacher.AddEditAssignmentActivity"
-            android:exported="true"/>
     </application>
 </manifest>
