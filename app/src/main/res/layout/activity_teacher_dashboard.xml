@@ -69,32 +69,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutAssignments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:elevation="2dp"
-        android:clickable="true"
-        android:focusable="true">
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_assignments"
-            android:contentDescription="Assignments Icon"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bài tập"
-            android:paddingLeft="16dp"
-            android:textSize="18sp"
-            android:textColor="#333333"/>
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/layoutNotifications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -120,31 +94,6 @@
             android:textColor="#333333"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layoutRegistrations"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:elevation="2dp"
-        android:clickable="true"
-        android:focusable="true">
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_registrations"
-            android:contentDescription="Registrations Icon"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đăng ký"
-            android:paddingLeft="16dp"
-            android:textSize="18sp"
-            android:textColor="#333333"/>
-    </LinearLayout>
 
 </LinearLayout>

@@ -39,8 +39,8 @@ public class TeacherCourseListActivity extends AppCompatActivity {
     private List<Course> getTeacherCourses() {
         List<Course> courses = new ArrayList<>();
         // Thêm dữ liệu mẫu
-        courses.add(new Course(1, 101, "Lập trình Android", R.drawable.ic_course_android, "Học lập trình ứng dụng Android từ cơ bản đến nâng cao.", 30, "ongoing", "2024-01-10", "2024-06-10", "1000000 VND", "5"));
-        courses.add(new Course(2, 101, "Cơ sở dữ liệu", R.drawable.ic_course_db, "Khóa học về thiết kế và quản lý cơ sở dữ liệu.", 25, "open", "2024-02-15", "2024-07-15", "1200000 VND", "4"));
+        courses.add(new Course(1, 101, "Lập trình Android", R.drawable.ic_course_android, "Học lập trình ứng dụng Android từ cơ bản đến nâng cao.", 30, "ongoing", "2024-01-10", "2024-06-10", "1000000 VND"));
+        courses.add(new Course(2, 101, "Cơ sở dữ liệu", R.drawable.ic_course_db, "Khóa học về thiết kế và quản lý cơ sở dữ liệu.", 25, "open", "2024-02-15", "2024-07-15", "1200000 VND"));
         // Thêm các khóa học khác...
         return courses;
     }

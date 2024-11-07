@@ -1,6 +1,6 @@
 package com.example.coursemate.model;
 
-public class Scheduled {
+public class Schedule {
     private int id;
     private String day;
     private float startTime;
@@ -9,7 +9,7 @@ public class Scheduled {
     private Classroom classroom;
 
     // Constructor đầy đủ
-    public Scheduled(int id, String day, float startTime, float endTime, Course course, Classroom classroom) {
+    public Schedule(int id, String day, float startTime, float endTime, Course course, Classroom classroom) {
         this.id = id;
         this.day = day;
         this.startTime = startTime;

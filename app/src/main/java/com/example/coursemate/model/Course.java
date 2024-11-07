@@ -12,10 +12,9 @@ public class Course {
     private String startDate;          // Định dạng "yyyy-MM-dd"
     private String endDate;            // Định dạng "yyyy-MM-dd"
     private String price;              // Giá khóa học
-    private String slot;               // Số lượng slot
 
     // Constructor đầy đủ (khớp với tham số truyền từ DatabaseHelper)
-    public Course(int id, int teacherId, String name, int iconResource, String description, int maxStudents, String status, String startDate, String endDate, String price, String slot) {
+    public Course(int id, int teacherId, String name, int iconResource, String description, int maxStudents, String status, String startDate, String endDate, String price) {
         this.id = id;
         this.teacherId = teacherId;
         this.name = name;
@@ -26,18 +25,40 @@ public class Course {
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
-        this.slot = slot;
     }
 
     // Constructor tối giản (phục vụ trường hợp chỉ có tên và iconResource)
-    public Course(String name, int iconResource, String description, String price, String slot) {
+    public Course(String name, int iconResource, String description, String price, int maxStudents) {
         this.name = name;
         this.iconResource = iconResource;
         this.description = description;
         this.price = price;
-        this.slot = slot;
+        this.maxStudents = maxStudents;
     }
 
+    // Constructor phục vụ cho TeacherSchedule
+    public Course(int id, String name, String description, int maxStudents, String status, String startDate, String endDate) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.maxStudents = maxStudents;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    // Constructor đầy đủ (khớp với tham số truyền từ DatabaseHelper)
+    public Course(int id, int teacherId, String name, String description, int maxStudents, String status, String startDate, String endDate, String price) {
+        this.id = id;
+        this.teacherId = teacherId;
+        this.name = name;
+        this.description = description;
+        this.maxStudents = maxStudents;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.price = price;
+    }
     // Getters và Setters cho tất cả các thuộc tính
     public int getId() {
         return id;
@@ -119,11 +140,4 @@ public class Course {
         this.price = price;
     }
 
-    public String getSlot() {
-        return slot;
-    }
-
-    public void setSlot(String slot) {
-        this.slot = slot;
-    }
 }

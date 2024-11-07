@@ -61,8 +61,8 @@ public class AdminCourseListActivity extends AppCompatActivity implements AdminC
 
     private void addSampleCourses() {
         // Thêm dữ liệu mẫu vào cơ sở dữ liệu
-        Course mathCourse = new Course(0, 101, "Math 101", R.drawable.ic_course_math, "Giới thiệu về Toán cao cấp", 30, "Mở", "2024-01-01", "2024-06-30", "500", "15");
-        Course historyCourse = new Course(0, 102, "History 201", R.drawable.ic_course_history, "Lịch sử thế giới cận đại", 25, "Đóng", "2024-02-01", "2024-07-31", "450", "10");
+        Course mathCourse = new Course(0, 101, "Math 101", R.drawable.ic_course_math, "Giới thiệu về Toán cao cấp", 30, "Mở", "2024-01-01", "2024-06-30", "500");
+        Course historyCourse = new Course(0, 102, "History 201", R.drawable.ic_course_history, "Lịch sử thế giới cận đại", 25, "Đóng", "2024-02-01", "2024-07-31", "450");
 
         databaseHelper.addCourse(mathCourse);
         databaseHelper.addCourse(historyCourse);

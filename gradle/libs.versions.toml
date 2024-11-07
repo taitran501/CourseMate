@@ -1,6 +1,5 @@
 [versions]
 agp = "8.6.0"
-bom = "VERSION"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -9,11 +8,8 @@ material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
 recyclerview = "1.3.2"
-recyclerviewV7 = "28.0.0"
 
 [libraries]
-auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -21,10 +17,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
-realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
-recyclerview-v7 = { module = "com.android.support:recyclerview-v7", version.ref = "recyclerviewV7" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

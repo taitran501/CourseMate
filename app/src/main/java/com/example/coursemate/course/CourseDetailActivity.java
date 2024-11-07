@@ -197,8 +197,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 status,
                 formattedStartDate,
                 formattedEndDate,
-                price,
-                currentCourse.getSlot() // Giữ nguyên slot
+                price
         );
 
         int rowsAffected = databaseHelper.updateCourse(updatedCourse);
