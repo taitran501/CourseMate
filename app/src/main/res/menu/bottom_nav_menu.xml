@@ -4,14 +4,17 @@
         android:id="@+id/nav_home"
         android:icon="@drawable/bottom_btn1"
         android:title="Trang chủ" />
+
     <item
         android:id="@+id/nav_course"
         android:icon="@drawable/bottom_btn2"
         android:title="Khóa học" />
+
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/bottom_btn3"
-        android:title="Hồ sơ" />
+        android:id="@+id/nav_schedule"
+        android:icon="@drawable/bottom_btn_schedule"
+        android:title="Thời khóa biểu" />
+
     <item
         android:id="@+id/nav_setting"
         android:icon="@drawable/bottom_btn4"

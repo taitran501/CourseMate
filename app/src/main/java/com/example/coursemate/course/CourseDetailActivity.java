@@ -35,7 +35,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_detail);
+        setContentView(R.layout.activity_admin_course_detail);
 
         // Khởi tạo Toolbar và thiết lập làm ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);

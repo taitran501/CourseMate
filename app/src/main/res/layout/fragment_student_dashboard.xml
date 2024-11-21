@@ -22,13 +22,13 @@
             android:orientation="horizontal"
             android:padding="8dp">
 
-            <!-- Icon thông báo -->
+            <!-- Hình ảnh avatar của người dùng -->
             <ImageView
-                android:id="@+id/notification"
-                android:layout_width="37dp"
-                android:layout_height="41dp"
-                android:layout_marginEnd="8dp"
-                app:srcCompat="@drawable/baseline_density_small_24" />
+                android:id="@+id/imageView1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/user_1" />
 
             <!-- Dòng chào người dùng -->
             <TextView
@@ -37,17 +37,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Xin chào Quang !"
+                android:textStyle="bold"
+                android:textColor="@color/black"
                 android:textSize="34sp"
-                android:includeFontPadding="false"
-                android:layout_gravity="center_vertical" />
+                android:includeFontPadding="false" />
 
-            <!-- Hình ảnh avatar của người dùng -->
+            <!-- Icon thông báo -->
             <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:src="@drawable/user_1" />
+                android:id="@+id/notification"
+                android:layout_width="37dp"
+                android:layout_height="41dp"
+                android:layout_marginEnd="8dp"
+                app:srcCompat="@drawable/baseline_notifications_24" />
         </LinearLayout>
 
         <!-- Mô tả tìm khóa học -->
@@ -58,19 +59,22 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="Tìm khóa học bạn muốn học"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="20sp" />
 
         <!-- Thanh tìm kiếm -->
-        <EditText
+        <TextView
             android:id="@+id/editTextText2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="16dp"
             android:background="@drawable/search_bg"
             android:drawableStart="@android:drawable/ic_menu_search"
-            android:hint="Tìm kiếm khóa học"
+            android:text="Tìm kiếm khoá học"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            android:gravity="center_vertical"
             android:singleLine="true" />
 
         <!-- Tiêu đề danh mục khóa học và liên kết Xem tất cả -->
@@ -87,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Danh mục"
+                android:textStyle="bold"
                 android:textSize="24sp"
                 android:textColor="#141313" />
 
@@ -134,6 +139,7 @@
                     android:layout_height="wrap_content"
                     android:text="Lập trình"
                     android:textColor="#FFFFFF"
+                    android:textStyle="bold"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
@@ -163,6 +169,7 @@
                     android:layout_height="wrap_content"
                     android:text="Thiết kế"
                     android:textColor="#FFFFFF"
+                    android:textStyle="bold"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
@@ -202,6 +209,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Trí tuệ nhân tạo và ML"
+                    android:textStyle="bold"
                     android:textColor="#FFFFFF"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp" />
@@ -230,7 +238,8 @@
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Khám phá"
+                    android:text="Hệ thống nhúng và IOT"
+                    android:textStyle="bold"
                     android:textColor="#FFFFFF"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp" />

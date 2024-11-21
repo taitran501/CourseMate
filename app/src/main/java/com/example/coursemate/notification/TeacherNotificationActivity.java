@@ -75,7 +75,7 @@ public class TeacherNotificationActivity extends AppCompatActivity {
 
     private void showNotificationDialog(Course course) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Gửi Thông Báo cho " + course.getName());
+        builder.setTitle("Gửi thông Báo cho " + course.getName());
 
         // Set up input
         LayoutInflater inflater = this.getLayoutInflater();

@@ -164,7 +164,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         courseValues.put(COLUMN_COURSE_DESCRIPTION, "Học lập trình ứng dụng Android từ cơ bản đến nâng cao.");
         courseValues.put(COLUMN_COURSE_MAX_STUDENTS, 30);
         courseValues.put(COLUMN_COURSE_TEACHER_ID, teacherId); // teacherId = 101
-        courseValues.put(COLUMN_COURSE_STATUS, "ongoing");
+        courseValues.put(COLUMN_COURSE_STATUS, "Mở");
         courseValues.put(COLUMN_COURSE_START_DATE, "2024-01-10");
         courseValues.put(COLUMN_COURSE_END_DATE, "2024-06-10");
         courseValues.put(COLUMN_COURSE_PRICE, "1000000 VND");
@@ -175,7 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         courseValues.put(COLUMN_COURSE_DESCRIPTION, "Khóa học về thiết kế và quản lý cơ sở dữ liệu.");
         courseValues.put(COLUMN_COURSE_MAX_STUDENTS, 25);
         courseValues.put(COLUMN_COURSE_TEACHER_ID, teacherId); // teacherId = 101
-        courseValues.put(COLUMN_COURSE_STATUS, "open");
+        courseValues.put(COLUMN_COURSE_STATUS, "Mở");
         courseValues.put(COLUMN_COURSE_START_DATE, "2024-02-15");
         courseValues.put(COLUMN_COURSE_END_DATE, "2024-07-15");
         courseValues.put(COLUMN_COURSE_PRICE, "1200000 VND");

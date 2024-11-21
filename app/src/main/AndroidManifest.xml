@@ -88,5 +88,8 @@
         <activity
             android:name=".notification.TeacherNotificationActivity"
             android:exported="true"/>
+        <activity
+            android:name=".SearchActivity"
+            android:exported="true"/>
     </application>
 </manifest>
