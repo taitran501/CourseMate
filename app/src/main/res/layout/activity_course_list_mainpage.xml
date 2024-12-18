@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/main"
     android:padding="16dp"
-    tools:ignore="ExtraText">
+    tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -19,28 +20,16 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCourseList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="16dp"/>
-    <TextView
-        android:id="@+id/tvCourseTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/course1"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
 
+    <!-- Button Go to Login, căn giữa theo chiều ngang -->
     <Button
-        android:id="@+id/btn_open_detail"
+        android:id="@+id/btnLoginScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/course_detail" />
-
-
-    <TextView
-        android:id="@+id/tvCourseDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/detail1"
-        android:textSize="14sp"
-        android:layout_marginTop="4dp"/>
-        /><!-- Mô tả cho khóa học --></LinearLayout>
+        android:text="Go to Login"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

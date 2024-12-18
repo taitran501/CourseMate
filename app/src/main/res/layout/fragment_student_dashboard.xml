@@ -24,7 +24,7 @@
 
             <!-- Hình ảnh avatar của người dùng -->
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/user_avatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
@@ -32,28 +32,22 @@
 
             <!-- Dòng chào người dùng -->
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tv_welcome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:includeFontPadding="false"
                 android:text="Xin chào Quang !"
-                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="34sp"
-                android:includeFontPadding="false" />
+                android:textStyle="bold" />
 
             <!-- Icon thông báo -->
-            <ImageView
-                android:id="@+id/notification"
-                android:layout_width="37dp"
-                android:layout_height="41dp"
-                android:layout_marginEnd="8dp"
-                app:srcCompat="@drawable/baseline_notifications_24" />
         </LinearLayout>
 
         <!-- Mô tả tìm khóa học -->
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv1_course_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -65,7 +59,7 @@
 
         <!-- Thanh tìm kiếm -->
         <TextView
-            android:id="@+id/editTextText2"
+            android:id="@+id/tv2_course_search"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="16dp"
@@ -86,7 +80,7 @@
             android:paddingHorizontal="16dp">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tv_course_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -96,7 +90,7 @@
                 android:textColor="#141313" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_see_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Xem tất cả"
@@ -116,7 +110,7 @@
 
             <!-- Danh mục Lập trình -->
             <LinearLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/category_programming"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -134,7 +128,7 @@
                     app:srcCompat="@drawable/btn_1" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/tv_lap_trinh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Lập trình"
@@ -146,7 +140,7 @@
 
             <!-- Danh mục Thiết kế -->
             <LinearLayout
-                android:id="@+id/constraintLayout2"
+                android:id="@+id/category_design"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -164,7 +158,7 @@
                     app:srcCompat="@drawable/btn_2" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/tv_thiet_ke"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Thiết kế"
@@ -187,7 +181,7 @@
 
             <!-- Danh mục Trí tuệ nhân tạo và Máy học -->
             <LinearLayout
-                android:id="@+id/constraintLayout3"
+                android:id="@+id/category_ai"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -205,7 +199,7 @@
                     app:srcCompat="@drawable/btn_3" />
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/tv_tri_tue_nhan_tao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Trí tuệ nhân tạo và ML"
@@ -217,7 +211,7 @@
 
             <!-- Danh mục Khám phá -->
             <LinearLayout
-                android:id="@+id/constraintLayout4"
+                android:id="@+id/category_more"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -235,10 +229,10 @@
                     app:srcCompat="@drawable/btn_4" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/tv_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hệ thống nhúng và IOT"
+                    android:text="Khám phá"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
                     android:layout_gravity="center"
@@ -247,14 +241,4 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- BottomNavigationView cố định ở dưới cùng màn hình -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        android:background="@color/white" />
 </LinearLayout>

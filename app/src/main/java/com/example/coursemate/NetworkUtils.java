@@ -12,278 +12,185 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class NetworkUtils {
-    String url;
-    Map<String, String> headers;
+    private final String baseUrl;
+    private final Map<String, String> headers;
 
-    public NetworkUtils(String url, Map<String, String> headers){
-        this.url = url;
+    public NetworkUtils(String baseUrl, Map<String, String> headers) {
+        this.baseUrl = baseUrl;
         this.headers = headers;
     }
 
-    public String getUrl(){
-        return url;
-    }
-
-    public Map<String, String> getHeaders(){
-        return headers;
-    }
-
+    /**
+     * Thực hiện một yêu cầu GET (SELECT).
+     *
+     * @param table tên bảng cần truy vấn.
+     * @param query chuỗi truy vấn (SQL-like, ví dụ: "select=id,name").
+     * @return CompletableFuture trả về dữ liệu JSON dạng chuỗi.
+     */
     public CompletableFuture<String> select(String table, String query) {
         return CompletableFuture.supplyAsync(() -> {
-            String response = "";
             try {
-                // Create URL object
-                URL url = new URL(this.url + table + "?" + query);
+                // Tạo URL với truy vấn
+                URL url = new URL(baseUrl + table + "?" + query);
+
+                // Kết nối HTTP
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
 
-                // Set the headers
-                for (Map.Entry<String, String> entry : this.headers.entrySet()) {
-                    connection.setRequestProperty(entry.getKey(), entry.getValue());
-                }
+                // Thêm headers
+                setHeaders(connection);
 
-                // Get the response code
+                // Kiểm tra phản hồi
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    // Read the response
-                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    String inputLine;
-                    StringBuilder responseBuilder = new StringBuilder();
-                    while ((inputLine = in.readLine()) != null) {
-                        responseBuilder.append(inputLine);
-                    }
-                    in.close();
-                    response = responseBuilder.toString();
+                    // Đọc kết quả trả về
+                    return readStream(connection);
                 } else {
-                    response = "GET request failed. Response Code: " + responseCode;
+                    throw new Exception("GET request failed. Response Code: " + responseCode);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("NetworkUtils", "Error in SELECT: ", e);
+                return null;
             }
-            return response;
         });
-
     }
 
+    /**
+     * Thực hiện một yêu cầu POST (INSERT).
+     *
+     * @param table tên bảng.
+     * @param jsonBody chuỗi JSON chứa dữ liệu cần chèn.
+     */
+    public CompletableFuture<Void> insert(String table, String jsonBody) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                // Tạo URL
+                URL url = new URL(baseUrl + table);
 
+                // Kết nối HTTP
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
 
-    public void insert(final String table, String dataString) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // URL for the POST request
-                String jsonInputString = dataString;
-                Log.d("JsonString", jsonInputString);
+                // Thêm headers
+                setHeaders(connection);
+                connection.setRequestProperty("Content-Type", "application/json");
 
-                try {
-                    // Create the URL object
-                    URL urlObj = new URL(NetworkUtils.this.url + table);
+                // Gửi dữ liệu JSON
+                writeStream(connection, jsonBody);
 
-                    // Open connection
-                    HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
-
-                    // Set HTTP method to POST
-                    connection.setRequestMethod("POST");
-
-                    // Set the headers
-                    for (Map.Entry<String, String> entry : NetworkUtils.this.headers.entrySet()) {
-                        connection.setRequestProperty(entry.getKey(), entry.getValue());
-                    }
-                    connection.setRequestProperty("Content-Type", "application/json");
-                    connection.setRequestProperty("Prefer", "return=minimal");
-
-                    // Enable output stream for sending data
-                    connection.setDoOutput(true);
-
-                    // Write the data to the output stream
-                    try (OutputStream outputStream = connection.getOutputStream()) {
-                        outputStream.write(jsonInputString.getBytes());
-                        outputStream.flush();
-                    }
-
-                    // Read the response
-                    int responseCode = connection.getResponseCode();
-                    Log.d("Response Code: ", String.valueOf(responseCode));
-
-                    try (BufferedReader br = new BufferedReader(
-                            new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                        StringBuilder response = new StringBuilder();
-                        String responseLine;
-                        while ((responseLine = br.readLine()) != null) {
-                            response.append(responseLine.trim());
-                        }
-                        Log.d("Response: ", response.toString());
-                    }
-                    connection.disconnect();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                // Kiểm tra phản hồi
+                int responseCode = connection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_CREATED) {
+                    throw new Exception("POST request failed. Response Code: " + responseCode);
                 }
+            } catch (Exception e) {
+                Log.e("NetworkUtils", "Error in INSERT: ", e);
             }
-        }).start();
+        });
     }
 
-    public void update(final String table, String query, String dataString) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // URL for the POST request
-                String jsonInputString = dataString;
-                Log.d("JsonString", jsonInputString);
+    /**
+     * Thực hiện một yêu cầu PATCH (UPDATE).
+     *
+     * @param table tên bảng.
+     * @param query chuỗi truy vấn (SQL-like, ví dụ: "id=eq.1").
+     * @param jsonBody chuỗi JSON chứa dữ liệu cần cập nhật.
+     */
+    public CompletableFuture<Void> update(String table, String query, String jsonBody) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                // Tạo URL với truy vấn
+                URL url = new URL(baseUrl + table + "?" + query);
 
-                try {
-                    // Create the URL object
-                    URL urlObj = new URL(NetworkUtils.this.url + table + "?" + query);
+                // Kết nối HTTP
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("PATCH");
+                connection.setDoOutput(true);
 
-                    // Open connection
-                    HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+                // Thêm headers
+                setHeaders(connection);
+                connection.setRequestProperty("Content-Type", "application/json");
 
-                    // Set HTTP method to POST
-                    connection.setRequestMethod("PATCH");
+                // Gửi dữ liệu JSON
+                writeStream(connection, jsonBody);
 
-                    // Set the headers
-                    for (Map.Entry<String, String> entry : NetworkUtils.this.headers.entrySet()) {
-                        connection.setRequestProperty(entry.getKey(), entry.getValue());
-                    }
-                    connection.setRequestProperty("Content-Type", "application/json");
-                    connection.setRequestProperty("Prefer", "return=minimal");
-
-                    // Enable output stream for sending data
-                    connection.setDoOutput(true);
-
-                    // Write the data to the output stream
-                    try (OutputStream outputStream = connection.getOutputStream()) {
-                        outputStream.write(jsonInputString.getBytes());
-                        outputStream.flush();
-                    }
-
-                    // Read the response
-                    int responseCode = connection.getResponseCode();
-                    Log.d("Response Code: ", String.valueOf(responseCode));
-
-                    try (BufferedReader br = new BufferedReader(
-                            new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                        StringBuilder response = new StringBuilder();
-                        String responseLine;
-                        while ((responseLine = br.readLine()) != null) {
-                            response.append(responseLine.trim());
-                        }
-                        Log.d("Response: ", response.toString());
-                    }
-                    connection.disconnect();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                // Kiểm tra phản hồi
+                int responseCode = connection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_NO_CONTENT) {
+                    throw new Exception("PATCH request failed. Response Code: " + responseCode);
                 }
+            } catch (Exception e) {
+                Log.e("NetworkUtils", "Error in UPDATE: ", e);
             }
-        }).start();
+        });
     }
 
-    public void delete(final String table, final String query) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // URL for the DELETE request (assuming the ID is part of the URL)
-                String urlString = NetworkUtils.this.url + table + "?" + query;
+    /**
+     * Thực hiện một yêu cầu DELETE.
+     *
+     * @param table tên bảng.
+     * @param query chuỗi truy vấn (SQL-like, ví dụ: "id=eq.1").
+     */
+    public CompletableFuture<Void> delete(String table, String query) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                // Tạo URL với truy vấn
+                URL url = new URL(baseUrl + table + "?" + query);
 
-                try {
-                    // Create the URL object
-                    URL urlObj = new URL(urlString);
+                // Kết nối HTTP
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("DELETE");
 
-                    // Open connection
-                    HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+                // Thêm headers
+                setHeaders(connection);
 
-                    // Set HTTP method to DELETE
-                    connection.setRequestMethod("DELETE");
-
-                    // Set the headers
-                    for (Map.Entry<String, String> entry : NetworkUtils.this.headers.entrySet()) {
-                        connection.setRequestProperty(entry.getKey(), entry.getValue());
-                    }
-                    connection.setRequestProperty("Content-Type", "application/json");
-
-                    // Enable input/output streams (even if we're not sending data)
-                    connection.setDoOutput(true);
-
-                    // Read the response
-                    int responseCode = connection.getResponseCode();
-                    Log.d("Response Code: ", String.valueOf(responseCode));
-
-                    // Handle success or failure response
-                    if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
-                        try (BufferedReader br = new BufferedReader(
-                                new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                            StringBuilder response = new StringBuilder();
-                            String responseLine;
-                            while ((responseLine = br.readLine()) != null) {
-                                response.append(responseLine.trim());
-                            }
-                            Log.d("Response: ", response.toString());
-                        }
-                    } else {
-                        // If response code is not 200 or 204, print error stream
-                        try (BufferedReader br = new BufferedReader(
-                                new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
-                            StringBuilder errorResponse = new StringBuilder();
-                            String errorLine;
-                            while ((errorLine = br.readLine()) != null) {
-                                errorResponse.append(errorLine.trim());
-                            }
-                            Log.e("Error Response: ", errorResponse.toString());
-                        }
-                    }
-
-                    connection.disconnect();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d("DELETE Error", String.valueOf(e));
+                // Kiểm tra phản hồi
+                int responseCode = connection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_NO_CONTENT) {
+                    throw new Exception("DELETE request failed. Response Code: " + responseCode);
                 }
+            } catch (Exception e) {
+                Log.e("NetworkUtils", "Error in DELETE: ", e);
             }
-        }).start();
+        });
     }
 
+    /**
+     * Đọc phản hồi từ kết nối HTTP.
+     */
+    private String readStream(HttpURLConnection connection) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+        return response.toString();
+    }
 
+    /**
+     * Gửi dữ liệu qua output stream.
+     */
+    private void writeStream(HttpURLConnection connection, String data) throws Exception {
+        try (OutputStream os = connection.getOutputStream()) {
+            byte[] input = data.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+            os.flush();
+        }
+    }
+
+    /**
+     * Thêm headers vào yêu cầu HTTP.
+     */
+    private void setHeaders(HttpURLConnection connection) {
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            connection.setRequestProperty(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
 }
-
-
-
-
-    // khoi tao headers
-
-//Map<String, String> headers = Map.of(
-//        "Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFuZW1zbmlqcWh0emlrYXR2dm1tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4ODk1MzQsImV4cCI6MjA0NjQ2NTUzNH0.omdglU20eJmYByHg-NGbLhLaY6roUTPTyLEkY54P4DI",
-//        "apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFuZW1zbmlqcWh0emlrYXR2dm1tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4ODk1MzQsImV4cCI6MjA0NjQ2NTUzNH0.omdglU20eJmYByHg-NGbLhLaY6roUTPTyLEkY54P4DI"
-//);
-    // khoi tao url
-//String url = "https://anemsnijqhtzikatvvmm.supabase.co/rest/v1/";
-
-    // tao class
-//NetworkUtils connector = new NetworkUtils(url, headers);
-    // read du lieu
-//CompletableFuture<String> future = connector.select("cabins", "select=status,totalPrice&status=eq.unconfirmed");
-//select = future.join();
-//        Log.d("asasdasd", select);
-//        Gson gson = new Gson();
-//        Type listType = new TypeToken<List<Student>>(){}.getType();
-//        List<Cabin> cabins = gson.fromJson(select, listType);
-
-
-    // Create du lieu
-//        Cabin cb = new Cabin("test", 10, 10, 1000, "description");
-//        Gson gson2 = new Gson();
-//        String jsonString = gson2.toJson(cb);
-//        Log.d("json", jsonString);
-//
-//        connector.insert("cabins", jsonString);
-
-
-    // Update du lieu
-//Cabin cb = new Cabin("test_update", 10, 10, 1000, "description");
-//Gson gson2 = new Gson();
-//String jsonString = gson2.toJson(cb);
-//        Log.d("json", jsonString);
-//
-//        connector.update("cabins", "id=eq.36",  jsonString);
-    // Delete du lieu
-//            connector.delete("cabins", "name=eq.tét");

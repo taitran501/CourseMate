@@ -30,10 +30,10 @@ public class AdminCourseListActivity extends AppCompatActivity implements AdminC
         // Khởi tạo DatabaseHelper
         databaseHelper = new DatabaseHelper(this);
 
-        // Thêm dữ liệu mẫu nếu bảng Course trống
-        if (databaseHelper.getAllCourses().isEmpty()) {
-            addSampleCourses();
-        }
+//        // Thêm dữ liệu mẫu nếu bảng Course trống
+//        if (databaseHelper.getAllCourses().isEmpty()) {
+//            addSampleCourses();
+//        }
 
         // Lấy danh sách khóa học từ cơ sở dữ liệu
         courseList = databaseHelper.getAllCourses();
@@ -59,14 +59,16 @@ public class AdminCourseListActivity extends AppCompatActivity implements AdminC
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
 
-    private void addSampleCourses() {
-        // Thêm dữ liệu mẫu vào cơ sở dữ liệu
-        Course mathCourse = new Course(0, 101, "Math 101", R.drawable.ic_course_math, "Giới thiệu về Toán cao cấp", 30, "Mở", "2024-01-01", "2024-06-30", "500");
-        Course historyCourse = new Course(0, 102, "History 201", R.drawable.ic_course_history, "Lịch sử thế giới cận đại", 25, "Đóng", "2024-02-01", "2024-07-31", "450");
 
-        databaseHelper.addCourse(mathCourse);
-        databaseHelper.addCourse(historyCourse);
-    }
+//
+//    private void addSampleCourses() {
+//        // Thêm dữ liệu mẫu vào cơ sở dữ liệu
+//        Course mathCourse = new Course(0, 101, "Math 101", R.drawable.ic_course_math, "Giới thiệu về Toán cao cấp", 30, "Mở", "2024-01-01", "2024-06-30", "500");
+//        Course historyCourse = new Course(0, 102, "History 201", R.drawable.ic_course_history, "Lịch sử thế giới cận đại", 25, "Đóng", "2024-02-01", "2024-07-31", "450");
+//
+//        databaseHelper.addCourse(mathCourse);
+//        databaseHelper.addCourse(historyCourse);
+//    }
 
     @Override
     public void onCourseClick(int position) {

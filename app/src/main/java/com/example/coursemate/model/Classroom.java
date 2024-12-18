@@ -14,6 +14,10 @@ public class Classroom {
         this.deskNum = deskNum;
     }
 
+    public Classroom(String classroomName) {
+        this.name = classroomName;
+    }
+
     // Getters và Setters
     public int getId() {
         return id;

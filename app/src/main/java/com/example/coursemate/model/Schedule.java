@@ -1,69 +1,40 @@
 package com.example.coursemate.model;
 
 public class Schedule {
-    private int id;
+    private String id;
     private String day;
-    private float startTime;
-    private float endTime;
-    private Course course;
-    private Classroom classroom;
+    private String startTime;
+    private String endTime;
+    private String courseName;
+    private String teacherName;
+    private String classroomName;
 
-    // Constructor đầy đủ
-    public Schedule(int id, String day, float startTime, float endTime, Course course, Classroom classroom) {
-        this.id = id;
-        this.day = day;
+    public Schedule(String courseName, String teacherName, String startTime, String endTime, String classroomName) {
+        this.courseName = courseName;
+        this.teacherName = teacherName;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.course = course;
-        this.classroom = classroom;
+        this.classroomName = classroomName;
     }
 
     // Getters và Setters
-    public int getId() {
-        return id;
+    public String getCourseName() {
+        return courseName;
     }
 
-    public String getDay() {
-        return day;
+    public String getTeacherName() {
+        return teacherName;
     }
 
-    public float getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public float getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public Course getCourse() {
-        return course;
-    }
-
-    public Classroom getClassroom() {
-        return classroom;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-    }
-
-    public void setStartTime(float startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(float endTime) {
-        this.endTime = endTime;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    public void setClassroom(Classroom classroom) {
-        this.classroom = classroom;
+    public String getClassroomName() {
+        return classroomName;
     }
 }

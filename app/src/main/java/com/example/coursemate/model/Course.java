@@ -2,7 +2,7 @@ package com.example.coursemate.model;
 
 public class Course {
     // Thuộc tính của lớp Course
-    private int id;                    // ID khóa học
+    private String id;                    // ID khóa học
     private int teacherId;             // ID giáo viên
     private String name;               // Tên khóa học
     private int iconResource;          // Icon khóa học
@@ -14,7 +14,7 @@ public class Course {
     private String price;              // Giá khóa học
 
     // Constructor đầy đủ (khớp với tham số truyền từ DatabaseHelper)
-    public Course(int id, int teacherId, String name, int iconResource, String description, int maxStudents, String status, String startDate, String endDate, String price) {
+    public Course(String id, int teacherId, String name, int iconResource, String description, int maxStudents, String status, String startDate, String endDate, String price) {
         this.id = id;
         this.teacherId = teacherId;
         this.name = name;
@@ -24,7 +24,6 @@ public class Course {
         this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.price = price;
     }
 
     // Constructor tối giản (phục vụ trường hợp chỉ có tên và iconResource)
@@ -36,8 +35,8 @@ public class Course {
         this.maxStudents = maxStudents;
     }
 
-    // Constructor phục vụ cho TeacherSchedule
-    public Course(int id, String name, String description, int maxStudents, String status, String startDate, String endDate) {
+    // Constructor cho TeacherSchedule
+    public Course(String id, String name, String description, int maxStudents, String status, String startDate, String endDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -47,24 +46,59 @@ public class Course {
         this.endDate = endDate;
     }
 
-    // Constructor đầy đủ (khớp với tham số truyền từ DatabaseHelper)
-    public Course(int id, int teacherId, String name, String description, int maxStudents, String status, String startDate, String endDate, String price) {
-        this.id = id;
+
+    // Constructor cho search course trong student dashboard
+    public Course(String courseName, String courseDescription) {
+        this.name = courseName;
+        this.description = courseDescription;
+    }
+
+    // Constructor cho schedule của student
+    public Course(String courseName, String courseDescription, String startTime, String endTime) {
+        this.name = courseName;
+        this.description = courseDescription;
+        this.startDate = startTime;
+        this.endDate = endTime;
+    }
+
+    public Course(String courseName, String courseDescription, String startTime, String endTime, String startDate, String endDate) {
+        this.name = courseName;
+        this.description = courseDescription;
+        this.startDate = startTime;
+        this.endDate = endTime;
+    }
+
+    // Constructor cho mainpage course adapter
+    public Course(String id, int teacherId, String name, int icCourseIcon, String description, int i, String startDate, String endDate, String price) {
+        this.id=id;
         this.teacherId = teacherId;
         this.name = name;
+        this.iconResource = icCourseIcon;
+        this.description = description;
+    }
+
+    // Constructor cho schedule của student
+    public Course(String courseName, String teacherName, String startTime, String endTime, String classroomName) {
+        this.name = courseName;
+        this.description = teacherName;
+        this.startDate = startTime;
+        this.endDate = endTime;
+    }
+
+    public Course(int courseId, int teacherId, String name, int icCoursePlaceholder, String description, int maxStudents, String status, String formattedStartDate, String formattedEndDate, String price) {
+        this.teacherId = teacherId;
+        this.name = name;
+        this.iconResource = icCoursePlaceholder;
         this.description = description;
         this.maxStudents = maxStudents;
-        this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.price = price;
     }
+
     // Getters và Setters cho tất cả các thuộc tính
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -140,4 +174,10 @@ public class Course {
         this.price = price;
     }
 
+    public String getStartTime() {
+        return startDate;
+    }
+    public String getEndTime() {
+        return endDate;
+    }
 }

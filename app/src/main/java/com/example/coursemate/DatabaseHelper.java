@@ -326,7 +326,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             if (cursor != null && cursor.moveToFirst()) {
                 course = new Course(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COURSE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COURSE_ID)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COURSE_TEACHER_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COURSE_NAME)),
                         R.drawable.ic_course_placeholder, // Placeholder cho icon
@@ -393,7 +393,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 Course course = new Course(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COURSE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COURSE_ID)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COURSE_TEACHER_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COURSE_NAME)),
                         R.drawable.ic_course_placeholder, // Placeholder cho icon
@@ -424,7 +424,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Course course = new Course(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COURSE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COURSE_ID)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COURSE_TEACHER_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COURSE_NAME)),
                         R.drawable.ic_course_placeholder, // Placeholder cho icon

@@ -26,6 +26,9 @@ public class Notification {
         this.createdAt = createdAt;
     }
 
+    public Notification(String message, String id, String aNew, Date createdAt) {
+    }
+
     // Getters và Setters
     public int getId() {
         return id;

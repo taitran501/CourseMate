@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursemate.auth.Login;
 import com.example.coursemate.model.Course;
-import com.example.coursemate.adapter.CourseAdapter;
-import com.example.coursemate.course_mainpage.CourseDetailActivity;
+import com.example.coursemate.adapter.MainPageCourseAdapter;
+import com.example.coursemate.course_mainpage.CourseDetailMainPage;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements CourseAdapter.OnCourseClickListener {
+public class MainActivity extends AppCompatActivity implements MainPageCourseAdapter.OnCourseClickListener {
 
     private ArrayList<Course> courseList;
     private DatabaseHelper dbHelper;
@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements CourseAdapter.OnC
         courseList.add(new Course("DOTNET - Công nghệ .NET", R.drawable.ic_course_icon, "Mô tả chi tiết khóa học", "550.000", 70));
 
         // Tạo adapter và truyền danh sách khóa học cùng listener
-        CourseAdapter courseAdapter = new CourseAdapter(courseList, this);
-        rvCourseList.setAdapter(courseAdapter);
+        MainPageCourseAdapter mainPageCourseAdapter = new MainPageCourseAdapter(courseList, this);
+        rvCourseList.setAdapter(mainPageCourseAdapter);
 
         // Thiết lập sự kiện cho nút Go to Login
         Button loginButton = findViewById(R.id.btnLoginScreen);
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements CourseAdapter.OnC
 
     @Override
     public void onCourseClick(int position) {
-        Intent intent = new Intent(MainActivity.this, CourseDetailActivity.class);
+        Intent intent = new Intent(MainActivity.this, CourseDetailMainPage.class);
 
         // Truyền thông tin khóa học vào Intent
         Course selectedCourse = courseList.get(position);

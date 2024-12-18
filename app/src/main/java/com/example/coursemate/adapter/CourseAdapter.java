@@ -3,43 +3,37 @@ package com.example.coursemate.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.coursemate.R;
 import com.example.coursemate.model.Course;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
 
-    private final ArrayList<Course> courseList;
-    private final OnCourseClickListener listener;
+    private List<Course> courseList;
 
-    public interface OnCourseClickListener {
-        void onCourseClick(int position);
-    }
-
-    public CourseAdapter(ArrayList<Course> courseList, OnCourseClickListener listener) {
+    public CourseAdapter(List<Course> courseList) {
         this.courseList = courseList;
-        this.listener = listener;
     }
 
     @NonNull
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course, parent, false);
+        // Inflate layout item_schedule_student_course.xml
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_schedule_student_course, parent, false);
         return new CourseViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         Course course = courseList.get(position);
+
+        // Bind data to views
         holder.tvCourseName.setText(course.getName());
-        holder.imgCourseIcon.setImageResource(course.getIconResource());
+        holder.tvCourseDescription.setText(course.getDescription());
+        holder.tvCourseTime.setText("Time: " + course.getStartTime() + " - " + course.getEndTime());
     }
 
     @Override
@@ -47,22 +41,15 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         return courseList.size();
     }
 
-    class CourseViewHolder extends RecyclerView.ViewHolder {
-        TextView tvCourseName;
-        ImageView imgCourseIcon;
+    public static class CourseViewHolder extends RecyclerView.ViewHolder {
+        TextView tvCourseName, tvCourseDescription, tvCourseTime;
 
-        public CourseViewHolder(@NonNull View itemView) {
+        public CourseViewHolder(View itemView) {
             super(itemView);
-            tvCourseName = itemView.findViewById(R.id.tvCourseName);
-            imgCourseIcon = itemView.findViewById(R.id.imgCourseIcon);
 
-            // Đảm bảo chỉ gọi listener khi nó đã được khởi tạo
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition(); // Thay thế getBindingAdapterPosition() bằng getAdapterPosition()
-                if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onCourseClick(position);
-                }
-            });
+            // Map XML views
+            tvCourseName = itemView.findViewById(R.id.course_name);
+            tvCourseTime = itemView.findViewById(R.id.course_time);
         }
     }
 }
