@@ -32,6 +32,8 @@ public class CourseListMainPage extends AppCompatActivity implements MainPageCou
         RecyclerView rvCourseList = findViewById(R.id.rvCourseList);
         rvCourseList.setLayoutManager(new LinearLayoutManager(this));
 
+        Log.d(TAG, "Setting up RecyclerView and Adapter");
+
         // Khởi tạo danh sách khóa học và adapter
         courseList = new ArrayList<>();
         mainPageCourseAdapter = new MainPageCourseAdapter(courseList, this);
@@ -58,14 +60,17 @@ public class CourseListMainPage extends AppCompatActivity implements MainPageCou
         CompletableFuture<String> future = SupabaseClientHelper.getNetworkUtils().select("Course", query);
         String url = SupabaseClientHelper.getNetworkUtils().getBaseUrl() + "Course?" + query;
         Log.d(TAG, "Request URL: " + url);
+        Log.d(TAG, "Supabase URL: " + SupabaseClientHelper.getNetworkUtils().getBaseUrl());
         future.thenAccept(response -> {
             if (response != null) {
                 Log.d(TAG, "API Response: " + response);
                 try {
                     ArrayList<Course> fetchedCourses = parseCoursesFromJson(response);
+                    Log.d(TAG, "Fetched " + fetchedCourses.size() + " courses");
                     runOnUiThread(() -> {
                         courseList.clear();
                         courseList.addAll(fetchedCourses);
+                        Log.d(TAG, "Updated courseList with " + courseList.size() + " courses");
                         mainPageCourseAdapter.notifyDataSetChanged();
                     });
                 } catch (Exception e) {
@@ -84,6 +89,7 @@ public class CourseListMainPage extends AppCompatActivity implements MainPageCou
      * Parse JSON response thành danh sách đối tượng Course.
      */
     private ArrayList<Course> parseCoursesFromJson(String json) throws Exception {
+        Log.d(TAG, "Starting parseCoursesFromJson method");
         ArrayList<Course> courses = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(json);
 
@@ -94,6 +100,8 @@ public class CourseListMainPage extends AppCompatActivity implements MainPageCou
             String id = jsonObject.getString("id"); // UUID là String
             String name = jsonObject.getString("name");
             String description = jsonObject.optString("description", "No Description");
+
+            Log.d(TAG, "Parsed Course: " + id + ", " + name + ", " + description);
 
             // Tạo đối tượng Course
             courses.add(new Course(id, 0, name, R.drawable.ic_course_icon, description, 0, "", "", ""));

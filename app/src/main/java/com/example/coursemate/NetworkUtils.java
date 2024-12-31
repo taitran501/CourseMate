@@ -33,19 +33,32 @@ public class NetworkUtils {
                 // Tạo URL với truy vấn
                 URL url = new URL(baseUrl + table + "?" + query);
 
+                Log.d("NetworkUtils", "Attempting connection to " + baseUrl + table + "?" + query);
                 // Kết nối HTTP
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
-
+                connection.setConnectTimeout(10000);
+                connection.setReadTimeout(10000);
+                Log.d("NetworkUtils", "Connection established");
                 // Thêm headers
-                setHeaders(connection);
-
+//                setHeaders(connection);
+                for (Map.Entry<String, String> entry : this.headers.entrySet()) {
+                    connection.setRequestProperty(entry.getKey(), entry.getValue());
+                    Log.d("NetworkUtils", "Header: " + entry.getKey() + " = " + entry.getValue());
+                }
+                Log.d("NetworkUtils", "Headers set");
                 // Kiểm tra phản hồi
+                Thread.sleep(2000);
                 int responseCode = connection.getResponseCode();
+                Log.d("NetworkUtils", "Response code: " + responseCode);
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     // Đọc kết quả trả về
+                    Log.d("NetworkUtils", "Reading response");
                     return readStream(connection);
+                } else if (isRedirect(responseCode)) {
+                    return handleRedirect(connection);
                 } else {
+                    Log.e("NetworkUtils", "GET request failed. Response Code: " + responseCode);
                     throw new Exception("GET request failed. Response Code: " + responseCode);
                 }
             } catch (Exception e) {
@@ -81,7 +94,12 @@ public class NetworkUtils {
 
                 // Kiểm tra phản hồi
                 int responseCode = connection.getResponseCode();
-                if (responseCode != HttpURLConnection.HTTP_CREATED) {
+                if (responseCode == HttpURLConnection.HTTP_CREATED || responseCode == HttpURLConnection.HTTP_OK) {
+                    Log.d("NetworkUtils", "POST request succeeded. Response Code: " + responseCode);
+                } else if (isRedirect(responseCode)) {
+                    handleRedirect(connection);
+                } else {
+                    Log.e("NetworkUtils", "POST request failed. Response Code: " + responseCode);
                     throw new Exception("POST request failed. Response Code: " + responseCode);
                 }
             } catch (Exception e) {
@@ -157,6 +175,38 @@ public class NetworkUtils {
     }
 
     /**
+     * Kiểm tra xem phản hồi có phải là chuyển hướng hay không.
+     */
+    private boolean isRedirect(int responseCode) {
+        return responseCode == HttpURLConnection.HTTP_MOVED_PERM ||
+                responseCode == HttpURLConnection.HTTP_MOVED_TEMP ||
+                responseCode == HttpURLConnection.HTTP_SEE_OTHER;
+    }
+
+    /**
+     * Xử lý chuyển hướng nếu phản hồi có mã chuyển hướng.
+     */
+    private String handleRedirect(HttpURLConnection connection) throws Exception {
+        String redirectUrl = connection.getHeaderField("Location");
+        if (redirectUrl == null) {
+            throw new Exception("Redirect URL is null");
+        }
+        Log.d("NetworkUtils", "Redirecting to: " + redirectUrl);
+        URL newUrl = new URL(redirectUrl);
+        HttpURLConnection redirectConnection = (HttpURLConnection) newUrl.openConnection();
+        setHeaders(redirectConnection);
+        redirectConnection.setRequestMethod("GET");
+
+        int responseCode = redirectConnection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            return readStream(redirectConnection);
+        } else {
+            Log.e("NetworkUtils", "Redirected request failed. Response Code: " + responseCode);
+            throw new Exception("Redirected request failed. Response Code: " + responseCode);
+        }
+    }
+
+    /**
      * Đọc phản hồi từ kết nối HTTP.
      */
     private String readStream(HttpURLConnection connection) throws Exception {
@@ -193,4 +243,31 @@ public class NetworkUtils {
     public String getBaseUrl() {
         return baseUrl;
     }
+
+    public CompletableFuture<Void> updatePassword(String username, String newPassword) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                String query = "username=eq." + username;
+                String jsonBody = "{\"password\": \"" + newPassword + "\"}";
+                URL url = new URL(baseUrl + "User?" + query);
+
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("PATCH");
+                connection.setDoOutput(true);
+
+                setHeaders(connection);
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                writeStream(connection, jsonBody);
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_NO_CONTENT) {
+                    throw new Exception("PATCH request failed. Response Code: " + responseCode);
+                }
+            } catch (Exception e) {
+                Log.e("NetworkUtils", "Error in updatePassword: ", e);
+            }
+        });
+    }
+
 }

@@ -4,18 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.example.coursemate.NetworkUtils;
 import com.example.coursemate.R;
+import com.example.coursemate.SupabaseClientHelper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class SignUp extends AppCompatActivity {
+
+    private static final String TAG = "SignUpActivity";
 
     private EditText etEmail, etFullName, etPhoneNumber, etPassword, etConfirmPassword;
     private Button btnSignUp;
@@ -37,12 +45,7 @@ public class SignUp extends AppCompatActivity {
             getSupportActionBar().setTitle("Đăng ký");
         }
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed(); // Quay lại activity trước đó
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         // Khởi tạo các view
         etEmail = findViewById(R.id.etEmail);
@@ -53,68 +56,40 @@ public class SignUp extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btnSignUp);
         tvSignInLink = findViewById(R.id.tvSignInLink);
 
-        // Sự kiện click vào "Đăng nhập ngay"
-        tvSignInLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Chuyển đến Login activity
-                Intent intent = new Intent(SignUp.this, Login.class);
-                startActivity(intent);
-                finish(); // Đóng SignUp activity
-            }
+        tvSignInLink.setOnClickListener(v -> {
+            Intent intent = new Intent(SignUp.this, Login.class);
+            startActivity(intent);
+            finish();
         });
 
-        // Xử lý sự kiện nhấn nút Đăng ký
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signUpUser();
-            }
-        });
+        btnSignUp.setOnClickListener(v -> signUpUser());
 
-        // Sự kiện ẩn/hiện mật khẩu cho cả etPassword và etConfirmPassword
-        etPassword.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    int drawableEnd = etPassword.getCompoundDrawables()[2] != null ? 2 : -1;
-                    if (drawableEnd != -1 && event.getRawX() >= (etPassword.getRight() - etPassword.getCompoundDrawables()[drawableEnd].getBounds().width())) {
-                        togglePasswordVisibility(etPassword);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-
-        etConfirmPassword.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    int drawableEnd = etConfirmPassword.getCompoundDrawables()[2] != null ? 2 : -1;
-                    if (drawableEnd != -1 && event.getRawX() >= (etConfirmPassword.getRight() - etConfirmPassword.getCompoundDrawables()[drawableEnd].getBounds().width())) {
-                        togglePasswordVisibility(etConfirmPassword);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
+        // Sự kiện ẩn/hiện mật khẩu
+        etPassword.setOnTouchListener(this::handlePasswordVisibility);
+        etConfirmPassword.setOnTouchListener(this::handlePasswordVisibility);
     }
 
-    // Hàm để ẩn/hiện mật khẩu
+    private boolean handlePasswordVisibility(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            EditText passwordField = (EditText) v;
+            int drawableEnd = passwordField.getCompoundDrawables()[2] != null ? 2 : -1;
+            if (drawableEnd != -1 && event.getRawX() >= (passwordField.getRight() - passwordField.getCompoundDrawables()[drawableEnd].getBounds().width())) {
+                togglePasswordVisibility(passwordField);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void togglePasswordVisibility(EditText passwordField) {
         if (passwordField.getTransformationMethod() instanceof PasswordTransformationMethod) {
             passwordField.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            passwordField.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_closed, 0);
         } else {
             passwordField.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            passwordField.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_open, 0);
         }
-        passwordField.setSelection(passwordField.getText().length()); // Để con trỏ ở cuối văn bản
+        passwordField.setSelection(passwordField.getText().length());
     }
 
-    // Hàm xử lý đăng ký người dùng
     private void signUpUser() {
         String email = etEmail.getText().toString().trim();
         String fullName = etFullName.getText().toString().trim();
@@ -122,18 +97,124 @@ public class SignUp extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        // Kiểm tra thông tin đầu vào (có thể thêm các kiểm tra khác tại đây)
         if (email.isEmpty() || fullName.isEmpty() || phoneNumber.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            String message = "Vui lòng điền đầy đủ thông tin";
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, message);
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "Mật khẩu và xác nhận mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+            String message = "Mật khẩu và xác nhận mật khẩu không khớp";
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, message);
             return;
         }
 
-        // TODO: Xử lý đăng ký với backend (ví dụ: Firebase, REST API)
-        Toast.makeText(this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+//        if (!isPasswordStrong(password)) {
+//            String message = "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số.";
+//            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+//            Log.d(TAG, message);
+//            return;
+//        }
+
+        try {
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("email", email);
+            requestBody.put("password", password);
+
+            // Authentication API URL
+            String authUrl = "/signup";
+
+            // Gọi API AUTH
+            NetworkUtils authNetworkUtils = SupabaseClientHelper.getAuthNetworkUtils();
+            authNetworkUtils.insert(authUrl, requestBody.toString()).thenRun(() -> {
+                Log.d(TAG, "Người dùng đã được đăng ký vào Supabase Authentication");
+
+                // Sau khi đăng ký thành công, đồng bộ vào bảng User
+                syncWithUserTable(email, password, fullName, phoneNumber);
+            }).exceptionally(throwable -> {
+                Log.e(TAG, "Lỗi khi đăng ký người dùng với Supabase Authentication", throwable);
+                runOnUiThread(() -> Toast.makeText(this, "Lỗi khi đăng ký tài khoản", Toast.LENGTH_SHORT).show());
+                return null;
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi chuẩn bị dữ liệu đăng ký", e);
+        }
     }
+
+    private void syncWithUserTable(String email, String password, String fullName, String phoneNumber) {
+        try {
+            JSONObject partnerRequestBody = new JSONObject();
+            partnerRequestBody.put("name", fullName);
+            partnerRequestBody.put("phone", phoneNumber);
+            partnerRequestBody.put("email", email);
+
+            // Gọi API REST cho bảng Partner
+            NetworkUtils networkUtils = SupabaseClientHelper.getNetworkUtils();
+            networkUtils.insert("Partner", partnerRequestBody.toString()).thenRun(() -> {
+                String queryPartnerId = "select=id&name=eq." + fullName + "&phone=eq." + phoneNumber + "&email=eq." + email;
+
+                // Truy vấn Partner để lấy Partner ID
+                networkUtils.select("Partner", queryPartnerId).thenAccept(partnerResponse -> {
+                    try {
+                        JSONArray partnerArray = new JSONArray(partnerResponse);
+
+                        if (partnerArray.length() == 0) {
+                            String message = "Không tìm thấy Partner tương ứng";
+                            Log.e(TAG, message);
+                            runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
+                            return;
+                        }
+
+                        JSONObject partner = partnerArray.getJSONObject(0);
+                        String partnerId = partner.getString("id");
+
+                        // Đồng bộ dữ liệu với bảng User
+                        JSONObject userRequestBody = new JSONObject();
+                        userRequestBody.put("username", email);
+                        userRequestBody.put("password", password);
+                        userRequestBody.put("role", "student");
+                        userRequestBody.put("partner_id", partnerId);
+
+                        networkUtils.insert("User", userRequestBody.toString()).thenRun(() -> {
+                            Log.d(TAG, "Người dùng đã được đồng bộ vào bảng User");
+
+                            runOnUiThread(() -> {
+                                Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SignUp.this, Login.class));
+                                finish();
+                            });
+                        }).exceptionally(throwable -> {
+                            Log.e(TAG, "Lỗi khi đồng bộ người dùng vào bảng User", throwable);
+                            return null;
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, "Lỗi xử lý kết quả Partner", e);
+                        runOnUiThread(() -> Toast.makeText(this, "Lỗi khi xử lý Partner", Toast.LENGTH_SHORT).show());
+                    }
+                }).exceptionally(throwable -> {
+                    Log.e(TAG, "Lỗi truy vấn Partner", throwable);
+                    runOnUiThread(() -> Toast.makeText(this, "Lỗi khi truy vấn Partner", Toast.LENGTH_SHORT).show());
+                    return null;
+                });
+            }).exceptionally(throwable -> {
+                Log.e(TAG, "Lỗi khi thêm đối tác (Partner)", throwable);
+                runOnUiThread(() -> Toast.makeText(this, "Lỗi khi thêm đối tác", Toast.LENGTH_SHORT).show());
+                return null;
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi chuẩn bị đồng bộ vào bảng User", e);
+        }
+    }
+
+
+//    private boolean isPasswordStrong(String password) {
+//        return password.length() >= 8 &&
+//                password.matches(".*[A-Z].*") &&
+//                password.matches(".*[a-z].*") &&
+//                password.matches(".*\\d.*") &&
+//                password.matches(".*[@#$%^&+=!].*");
+//    }
+
 }

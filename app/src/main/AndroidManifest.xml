@@ -16,6 +16,7 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         tools:replace="android:appComponentFactory">
 
+
         <activity
             android:name=".course_mainpage.CourseListMainPage"
             android:exported="true">
@@ -78,18 +79,18 @@
         <activity
             android:name=".course.CourseDetailActivity"
             android:exported="true"/>
-        <activity
-            android:name=".teacher.TeacherDashboardActivity"
-            android:exported="true"/>
+<!--        <activity-->
+<!--            android:name=".teacher.TeacherDashboardActivity"-->
+<!--            android:exported="true"/>-->
         <activity
             android:name=".teacher.TeacherCourseListActivity"
             android:exported="true"/>
         <activity
             android:name=".teacher.TeacherScheduleActivity"
             android:exported="true"/>
-        <activity
-            android:name=".notification.TeacherNotificationActivity"
-            android:exported="true"/>
+<!--        <activity-->
+<!--            android:name=".notification.TeacherNotificationActivity"-->
+<!--            android:exported="true"/>-->
         <activity
             android:name=".SearchActivity"
             android:exported="true"/>

@@ -16,24 +16,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.coursemate.NetworkUtils;
 import com.example.coursemate.R;
 import com.example.coursemate.SupabaseClientHelper;
-import com.example.coursemate.adapter.CourseAdapter;
-import com.example.coursemate.model.Course;
-import com.example.coursemate.model.Schedule;
 import com.example.coursemate.adapter.ScheduleAdapter;
+import com.example.coursemate.model.Schedule;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.CompletableFuture;
 
 public class FragmentSchedule extends Fragment {
 
     private CalendarView calendarView;
     private RecyclerView recyclerView;
-    private ScheduleAdapter scheduleAdapter; // Adapter cho RecyclerView
-    private ArrayList<Schedule> scheduleList; // Danh sách dữ liệu
+    private ScheduleAdapter scheduleAdapter;
+    private ArrayList<Schedule> scheduleList;
 
     private static final String TAG = "FragmentSchedule";
 
@@ -42,28 +43,27 @@ public class FragmentSchedule extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
 
-        // Khởi tạo RecyclerView
+        // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.rv_schedule);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Khởi tạo danh sách và adapter
-        scheduleList = new ArrayList<>(); // Khởi tạo danh sách rỗng
-        scheduleAdapter = new ScheduleAdapter(scheduleList, getContext()); // Khởi tạo adapter
-        recyclerView.setAdapter(scheduleAdapter); // Gắn adapter vào RecyclerView
+        // Initialize schedule list and adapter
+        scheduleList = new ArrayList<>();
+        scheduleAdapter = new ScheduleAdapter(scheduleList, getContext());
+        recyclerView.setAdapter(scheduleAdapter);
 
-        // Khởi tạo CalendarView
+        // Initialize CalendarView
         calendarView = view.findViewById(R.id.calendar_view);
-        calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
-            fetchCoursesForDate(year, month, dayOfMonth);
-        });
+        calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> fetchCoursesForDate(year, month, dayOfMonth));
 
         return view;
     }
 
     private void fetchCoursesForDate(int year, int month, int dayOfMonth) {
         scheduleList.clear();
+        scheduleAdapter.notifyDataSetChanged(); // Clear RecyclerView immediately
 
-        int dayOfWeek = (dayOfMonth % 7); // Tính ngày trong tuần
+        int dayOfWeek = (dayOfMonth % 7); // Calculate day of the week
         String scheduleQuery = "select=id,day,start_time,end_time,course_id,classroom_id&day=eq." + dayOfWeek;
 
         NetworkUtils networkUtils = SupabaseClientHelper.getNetworkUtils();
@@ -72,6 +72,13 @@ public class FragmentSchedule extends Fragment {
             if (response != null && !response.isEmpty()) {
                 try {
                     JSONArray scheduleArray = new JSONArray(response);
+                    if (scheduleArray.length() == 0) {
+                        Log.d(TAG, "No schedules found for the selected date.");
+                        scheduleList.clear();
+                        getActivity().runOnUiThread(() -> scheduleAdapter.notifyDataSetChanged());
+                        return;
+                    }
+
                     for (int i = 0; i < scheduleArray.length(); i++) {
                         JSONObject scheduleObject = scheduleArray.getJSONObject(i);
 
@@ -80,17 +87,21 @@ public class FragmentSchedule extends Fragment {
                         String courseId = scheduleObject.optString("course_id");
                         String classroomId = scheduleObject.optString("classroom_id");
 
-                        fetchCourseAndTeacher(networkUtils, courseId, classroomId, startTime, endTime);
+                        fetchCourseAndTeacher(networkUtils, courseId, classroomId, startTime, endTime, year, month, dayOfMonth);
                     }
                 } catch (JSONException e) {
                     Log.e(TAG, "Error parsing Schedule: ", e);
                 }
+            } else {
+                Log.d(TAG, "No schedules found for the selected date.");
+                scheduleList.clear();
+                getActivity().runOnUiThread(() -> scheduleAdapter.notifyDataSetChanged());
             }
         });
     }
 
-    private void fetchCourseAndTeacher(NetworkUtils networkUtils, String courseId, String classroomId, String startTime, String endTime) {
-        String courseQuery = "select=name,teacher_id&id=eq." + courseId;
+    private void fetchCourseAndTeacher(NetworkUtils networkUtils, String courseId, String classroomId, String startTime, String endTime, int year, int month, int dayOfMonth) {
+        String courseQuery = "select=name,teacher_id,end_date&id=eq." + courseId;
 
         networkUtils.select("Course", courseQuery).thenAccept(courseResponse -> {
             if (courseResponse != null && !courseResponse.isEmpty()) {
@@ -98,6 +109,12 @@ public class FragmentSchedule extends Fragment {
                     JSONObject courseObject = new JSONArray(courseResponse).getJSONObject(0);
                     String courseName = courseObject.optString("name", "No Course Name");
                     String teacherId = courseObject.optString("teacher_id");
+                    String endDate = courseObject.optString("end_date");
+
+                    if (isDateAfterEndDate(year, month, dayOfMonth, endDate)) {
+                        Log.d(TAG, "Selected date is after course end date. Skipping.");
+                        return;
+                    }
 
                     fetchTeacherAndClassroom(networkUtils, teacherId, classroomId, courseName, startTime, endTime);
                 } catch (JSONException e) {
@@ -108,12 +125,8 @@ public class FragmentSchedule extends Fragment {
     }
 
     private void fetchTeacherAndClassroom(NetworkUtils networkUtils, String teacherId, String classroomId, String courseName, String startTime, String endTime) {
-        String userQuery = "select=partner_id&id=eq." + teacherId; // Truy vấn partner_id từ bảng User
+        String userQuery = "select=partner_id&id=eq." + teacherId; // Query partner_id from User table
         String classroomQuery = "select=name&id=eq." + classroomId;
-
-        // Log truy vấn
-        Log.d(TAG, "User Query: " + userQuery);
-        Log.d(TAG, "Classroom Query: " + classroomQuery);
 
         CompletableFuture<String> userFuture = networkUtils.select("User", userQuery);
         CompletableFuture<String> classroomFuture = networkUtils.select("Classroom", classroomQuery);
@@ -123,17 +136,15 @@ public class FragmentSchedule extends Fragment {
                 String teacherName = "Unknown Teacher";
                 String classroomName = "Unknown Room";
 
-                // Lấy partner_id từ bảng User
+                // Get partner_id from User table
                 if (userFuture.get() != null && !userFuture.get().isEmpty()) {
                     JSONArray userArray = new JSONArray(userFuture.get());
                     if (userArray.length() > 0) {
                         JSONObject userObject = userArray.getJSONObject(0);
                         String partnerId = userObject.optString("partner_id");
 
-                        // Truy vấn Partner để lấy teacherName
+                        // Query Partner to get teacherName
                         String partnerQuery = "select=name&id=eq." + partnerId;
-                        Log.d(TAG, "Partner Query: " + partnerQuery);
-
                         String partnerResponse = networkUtils.select("Partner", partnerQuery).get();
                         if (partnerResponse != null && !partnerResponse.isEmpty()) {
                             JSONArray partnerArray = new JSONArray(partnerResponse);
@@ -145,7 +156,7 @@ public class FragmentSchedule extends Fragment {
                     }
                 }
 
-                // Lấy classroomName từ bảng Classroom
+                // Get classroomName from Classroom table
                 if (classroomFuture.get() != null && !classroomFuture.get().isEmpty()) {
                     JSONArray classroomArray = new JSONArray(classroomFuture.get());
                     if (classroomArray.length() > 0) {
@@ -154,11 +165,11 @@ public class FragmentSchedule extends Fragment {
                     }
                 }
 
-                // Tạo đối tượng Schedule và thêm vào danh sách
+                // Create Schedule object and add to the list
                 Schedule schedule = new Schedule(courseName, teacherName, startTime, endTime, classroomName);
                 scheduleList.add(schedule);
 
-                // Cập nhật RecyclerView
+                // Update RecyclerView
                 getActivity().runOnUiThread(() -> scheduleAdapter.notifyDataSetChanged());
 
             } catch (Exception e) {
@@ -167,4 +178,16 @@ public class FragmentSchedule extends Fragment {
         });
     }
 
+    private boolean isDateAfterEndDate(int year, int month, int day, String endDate) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date selectedDate = new GregorianCalendar(year, month, day).getTime();
+            Date courseEndDate = sdf.parse(endDate);
+
+            return selectedDate.after(courseEndDate);
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing date: ", e);
+            return false;
+        }
+    }
 }
