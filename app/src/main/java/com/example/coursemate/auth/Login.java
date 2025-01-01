@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.coursemate.NetworkUtils;
 import com.example.coursemate.OverviewActivity;
+import com.example.coursemate.PaymentActivity;
 import com.example.coursemate.R;
 import com.example.coursemate.SupabaseClientHelper;
 import com.example.coursemate.fragment.StudentDashboardActivity;
@@ -65,7 +66,18 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btnLogin.setOnClickListener(view -> loginUser());
+        btnLogin.setOnClickListener(view -> {
+            String returnTo = getIntent().getStringExtra("returnTo");
+
+            if ("payment".equals(returnTo)) {
+                // Nếu quay lại từ giao diện thanh toán, sử dụng logic dành riêng
+                handleLoginForPayment();
+            } else {
+                // Nếu không phải từ giao diện thanh toán, điều hướng dựa trên role
+                handleLoginByRole();
+            }
+        });
+
 
         // Sự kiện ẩn/hiện mật khẩu
         etPassword.setOnTouchListener((v, event) -> {
@@ -80,6 +92,58 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void handleLoginForPayment() {
+        loginUser(() -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
+            String role = sharedPreferences.getString("role", "");
+
+            if (!"student".equals(role)) {
+                // Ngăn chặn nếu role không phải là student
+                Toast.makeText(this, "Chỉ tài khoản Student mới được phép thanh toán.", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Không cho phép tài khoản với vai trò '" + role + "' thực hiện thanh toán.");
+                return;
+            }
+
+            // Nếu role là student, chuyển đến giao diện thanh toán
+            Intent intent = getIntent();
+            String courseId = intent.getStringExtra("courseId");
+            String courseName = intent.getStringExtra("courseName");
+            String coursePrice = intent.getStringExtra("coursePrice");
+
+            Intent paymentIntent = new Intent(Login.this, PaymentActivity.class);
+            paymentIntent.putExtra("courseId", courseId);
+            paymentIntent.putExtra("courseName", courseName);
+            paymentIntent.putExtra("coursePrice", coursePrice);
+            startActivity(paymentIntent);
+            finish();
+        });
+    }
+
+
+    private void handleLoginByRole() {
+        loginUser(() -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
+            String role = sharedPreferences.getString("role", "");
+
+            Intent intentRole;
+            if ("admin".equals(role)) {
+                intentRole = new Intent(Login.this, OverviewActivity.class);
+                Log.d(TAG, "Chuyển hướng đến màn hình admin");
+            } else if ("student".equals(role)) {
+                intentRole = new Intent(Login.this, StudentDashboardActivity.class);
+                Log.d(TAG, "Chuyển hướng đến màn hình student");
+            } else {
+                String message = "Vai trò không hợp lệ";
+                runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
+                Log.d(TAG, message);
+                return;
+            }
+
+            startActivity(intentRole);
+            finish();
+        });
+    }
+
     // Hàm để ẩn/hiện mật khẩu
     private void togglePasswordVisibility(EditText passwordField) {
         if (passwordField.getTransformationMethod() instanceof PasswordTransformationMethod) {
@@ -90,14 +154,12 @@ public class Login extends AppCompatActivity {
         passwordField.setSelection(passwordField.getText().length());
     }
 
-    private void loginUser() {
+    private void loginUser(Runnable onSuccessCallback) {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString();
 
         if (email.isEmpty() || password.isEmpty()) {
-            String message = "Vui lòng nhập đầy đủ thông tin";
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Trường thông tin bị bỏ trống: email=" + email + ", password=" + password);
+            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -110,59 +172,21 @@ public class Login extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(response);
                     if (jsonArray.length() > 0) {
                         JSONObject user = jsonArray.getJSONObject(0);
-                        String username = user.optString("username", "");
-                        String role = user.optString("role", "");
-                        String partnerId = user.optString("partner_id", null);
-
-                        Log.d(TAG, "Đăng nhập thành công: username=" + username + ", role=" + role + ", partner_id=" + partnerId);
-
-                        if (partnerId == null) {
-                            Log.e(TAG, "partner_id is null for username: " + username);
-                            runOnUiThread(() -> Toast.makeText(this, "Lỗi: partner_id chưa được gán", Toast.LENGTH_SHORT).show());
-                            return;
-                        }
-
-                        // Lưu thông tin đăng nhập vào SharedPreferences
-                        saveUserSession(username, role, partnerId);
-
-                        Intent intent;
-                        if (role.equals("admin")) {
-                            intent = new Intent(Login.this, OverviewActivity.class);
-                            Log.d(TAG, "Chuyển hướng đến màn hình admin");
-                        } else if (role.equals("student")) {
-                            intent = new Intent(Login.this, StudentDashboardActivity.class);
-                            Log.d(TAG, "Chuyển hướng đến màn hình student");
-                        } else {
-                            String message = "Vai trò không hợp lệ";
-                            runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
-                            Log.d(TAG, message);
-                            return;
-                        }
-
-                        startActivity(intent);
-                        finish();
+                        saveUserSession(user.optString("username"), user.optString("role"), user.optString("partner_id"));
+                        runOnUiThread(onSuccessCallback);
                     } else {
-                        String message = "Thông tin đăng nhập không chính xác";
-                        runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
-                        Log.d(TAG, "Đăng nhập thất bại: Tài khoản hoặc mật khẩu không đúng, email=" + email);
+                        runOnUiThread(() -> Toast.makeText(this, "Thông tin đăng nhập không chính xác", Toast.LENGTH_SHORT).show());
                     }
                 } catch (Exception e) {
-                    String message = "Lỗi xử lý thông tin người dùng";
-                    Log.e(TAG, message, e);
-                    runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(this, "Lỗi xử lý phản hồi từ máy chủ", Toast.LENGTH_SHORT).show());
                 }
-            } else {
-                String message = "Không thể kết nối tới máy chủ";
-                runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
-                Log.d(TAG, "Lỗi kết nối tới máy chủ Supabase");
             }
         }).exceptionally(throwable -> {
-            String message = "Lỗi kết nối khi truy vấn Supabase";
-            Log.e(TAG, message, throwable);
-            runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> Toast.makeText(this, "Không thể kết nối đến máy chủ", Toast.LENGTH_SHORT).show());
             return null;
         });
     }
+
 
     // Hàm lưu thông tin đăng nhập vào SharedPreferences
     private void saveUserSession(String username, String role, String partnerId) {
@@ -175,4 +199,5 @@ public class Login extends AppCompatActivity {
 
         Log.d(TAG, "Đã lưu thông tin user session: username=" + username + ", role=" + role + ", partner_id=" + partnerId);
     }
+
 }

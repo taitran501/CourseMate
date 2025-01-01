@@ -2,6 +2,8 @@ package com.example.coursemate;
 
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -20,6 +22,51 @@ public class NetworkUtils {
         this.headers = headers;
     }
 
+    // Post method
+    public CompletableFuture<String> post(String urlString, JSONObject requestBody) {
+        return CompletableFuture.supplyAsync(() -> {
+            HttpURLConnection connection = null;
+            try {
+                // Mở kết nối
+                URL url = new URL(urlString);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Authorization", "Bearer " + SupabaseClientHelper.getApiKey());
+                connection.setRequestProperty("apikey", SupabaseClientHelper.getApiKey());
+                connection.setDoOutput(true);
+
+                // Ghi dữ liệu body
+                try (OutputStream os = connection.getOutputStream()) {
+                    os.write(requestBody.toString().getBytes());
+                    os.flush();
+                }
+
+                // Kiểm tra phản hồi
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+                    return response.toString();
+                } else {
+                    Log.e("NetworkUtils", "POST request failed. Response Code: " + responseCode);
+                    return null;
+                }
+            } catch (Exception e) {
+                Log.e("NetworkUtils", "Error during POST request", e);
+                return null;
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+        });
+    }
     /**
      * Thực hiện một yêu cầu GET (SELECT).
      *
