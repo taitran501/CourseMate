@@ -1,99 +1,105 @@
 package com.example.coursemate.course_mainpage;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import com.example.coursemate.NetworkUtils;
 import com.example.coursemate.R;
 import com.example.coursemate.SupabaseClientHelper;
+import com.example.coursemate.auth.Login;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import android.content.Intent;
 
 public class CourseDetailMainPage extends AppCompatActivity {
 
-    private TextView courseNameTextView, courseDescriptionTextView, courseSlotTextView, teacherNameTextView;
-    private Button registerButton;
-    private String courseId; // UUID thay vì int
+    private TextView courseNameTextView, courseDescriptionTextView, courseSlotTextView, teacherNameTextView, coursePriceTextView;
+    private String courseId;
     private static final String TAG = "CourseDetailMainPage";
 
-    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail_mainpage);
 
-        // Nhận giá trị từ Intent
-        Intent intent = getIntent();
-        courseId = intent.getStringExtra("courseId");
-        Log.d(TAG, "Received courseId: " + courseId);
-
-        if (courseId == null || courseId.isEmpty()) {
-            Log.e(TAG, "Invalid courseId: " + courseId);
-            return;
-        }
-
-        // Khởi tạo các TextView và Button
+        // Initialize Views
         courseNameTextView = findViewById(R.id.courseNameTextView);
         courseDescriptionTextView = findViewById(R.id.courseDescriptionTextView);
         courseSlotTextView = findViewById(R.id.courseSlotTextView);
         teacherNameTextView = findViewById(R.id.teacherNameTextView);
-        registerButton = findViewById(R.id.registerButton);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        coursePriceTextView = findViewById(R.id.coursePriceTextView);
+        Button registerButton = findViewById(R.id.registerButton);
 
-        // Thiết lập Toolbar làm ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Thông tin khoá học");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Sự kiện click vào nút quay lại
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
-        // Gọi API để lấy thông tin chi tiết khóa học
-        fetchCourseDetailsFromAPI();
+        // Get courseId from Intent
+        courseId = getIntent().getStringExtra("courseId");
+        Log.d(TAG, "Received courseId: " + courseId);
+
+        // Xử lý nút Đăng ký
+        registerButton.setOnClickListener(view -> {
+            Intent loginIntent = new Intent(CourseDetailMainPage.this, Login.class);
+            loginIntent.putExtra("returnTo", "payment");
+            loginIntent.putExtra("courseId", courseId);
+            loginIntent.putExtra("courseName", courseNameTextView.getText().toString());
+            loginIntent.putExtra("coursePrice", coursePriceTextView.getText().toString());
+            startActivity(loginIntent);
+        });
+
+
+        if (courseId != null && !courseId.isEmpty()) {
+            fetchCourseDetails();
+        } else {
+            Log.e(TAG, "Invalid courseId: " + courseId);
+        }
     }
 
-    /**
-     * Gọi API Supabase để lấy thông tin chi tiết khóa học.
-     */
-    private void fetchCourseDetailsFromAPI() {
+    private void fetchCourseDetails() {
         Log.d(TAG, "Fetching course details for courseId: " + courseId);
-        String queryCourse = "select=id,name,description,max_students,teacher_id&status=eq.open&id=eq." + courseId;
 
-        SupabaseClientHelper.getNetworkUtils().select("Course", queryCourse).thenAccept(response -> {
+        String url = SupabaseClientHelper.getNetworkUtils().getBaseUrl() + "/rpc/get_course_details";
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("course_uuid", courseId);
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating request body", e);
+            return;
+        }
+
+        SupabaseClientHelper.getNetworkUtils().post(url, requestBody).thenAccept(response -> {
             if (response != null && !response.isEmpty()) {
-                Log.d(TAG, "Course API Response: " + response);
+                Log.d(TAG, "API Response: " + response);
                 try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    if (jsonArray.length() > 0) {
-                        JSONObject course = jsonArray.getJSONObject(0);
-                        String courseName = course.optString("name", "No Name");
-                        String courseDescription = course.optString("description", "No Description");
+                    // Chuyển từ JSONArray thay vì JSONObject
+                    JSONArray coursesArray = new JSONArray(response);
+                    if (coursesArray.length() > 0) {
+                        JSONObject course = coursesArray.getJSONObject(0); // Lấy phần tử đầu tiên của mảng
+                        String courseName = course.optString("course_name", "No Name");
+                        String courseDescription = course.optString("course_description", "No Description");
                         int courseSlot = course.optInt("max_students", 0);
-                        String teacherId = course.optString("teacher_id", "");
+                        String teacherName = course.optString("teacher_name", "Unknown Teacher");
+                        double coursePrice = course.optDouble("course_price", 0.0);
 
-                        Log.d(TAG, "Course Name: " + courseName);
-                        Log.d(TAG, "Course Description: " + courseDescription);
-                        Log.d(TAG, "Course Slots: " + courseSlot);
-                        Log.d(TAG, "Teacher ID: " + teacherId);
-
-                        fetchTeacherDetails(teacherId, courseName, courseDescription, courseSlot);
+                        updateUI(courseName, courseDescription, courseSlot, teacherName, coursePrice);
+                    } else {
+                        Log.e(TAG, "No course data found in response.");
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error parsing course details", e);
                 }
             } else {
-                Log.e(TAG, "Empty response for course details.");
+                Log.e(TAG, "Empty or invalid response for course details.");
             }
         }).exceptionally(throwable -> {
             Log.e(TAG, "Failed to fetch course details", throwable);
@@ -101,63 +107,18 @@ public class CourseDetailMainPage extends AppCompatActivity {
         });
     }
 
-    private void fetchTeacherDetails(String teacherId, String courseName, String courseDescription, int courseSlot) {
-        if (teacherId == null || teacherId.isEmpty()) {
-            updateUI(courseName, courseDescription, courseSlot, "Unknown Teacher");
-            return;
-        }
-
-        String queryUser = "select=partner_id&id=eq." + teacherId;
-        Log.d(TAG, "Fetching teacher details with teacherId: " + teacherId);
-
-        SupabaseClientHelper.getNetworkUtils().select("User", queryUser).thenAccept(response -> {
-            if (response != null) {
-                Log.d(TAG, "Teacher API Response: " + response);
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    if (jsonArray.length() > 0) {
-                        String partnerId = jsonArray.getJSONObject(0).optString("partner_id", "");
-                        Log.d(TAG, "Partner ID: " + partnerId);
-                        fetchPartnerDetails(partnerId, courseName, courseDescription, courseSlot);
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Error fetching teacher details", e);
-                }
-            }
-        });
-    }
-
-    private void fetchPartnerDetails(String partnerId, String courseName, String courseDescription, int courseSlot) {
-        if (partnerId == null || partnerId.isEmpty()) {
-            updateUI(courseName, courseDescription, courseSlot, "Unknown Teacher");
-            return;
-        }
-
-        String queryPartner = "select=name&id=eq." + partnerId;
-        Log.d(TAG, "Fetching partner details with partnerId: " + partnerId);
-
-        SupabaseClientHelper.getNetworkUtils().select("Partner", queryPartner).thenAccept(response -> {
-            if (response != null) {
-                Log.d(TAG, "Partner API Response: " + response);
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    String teacherName = jsonArray.length() > 0 ? jsonArray.getJSONObject(0).optString("name", "Unknown Teacher") : "Unknown Teacher";
-                    Log.d(TAG, "Teacher Name: " + teacherName);
-                    updateUI(courseName, courseDescription, courseSlot, teacherName);
-                } catch (Exception e) {
-                    Log.e(TAG, "Error fetching partner details", e);
-                }
-            }
-        });
-    }
-
-    private void updateUI(String courseName, String courseDescription, int courseSlot, String teacherName) {
+    private void updateUI(String courseName, String courseDescription, int courseSlot, String teacherName, double coursePrice) {
         runOnUiThread(() -> {
             Log.d(TAG, "Updating UI with course details");
             courseNameTextView.setText(courseName);
             courseDescriptionTextView.setText(courseDescription);
             courseSlotTextView.setText(courseSlot + " slots");
             teacherNameTextView.setText("Giáo viên: " + teacherName);
+            coursePriceTextView.setText("Giá tiền: " + formatCurrency(coursePrice) + " đồng");
         });
+    }
+
+    private String formatCurrency(double amount) {
+        return String.format("%,.0f", amount).replace(",", ".");
     }
 }

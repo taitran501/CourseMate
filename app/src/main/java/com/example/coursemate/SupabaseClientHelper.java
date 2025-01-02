@@ -33,4 +33,8 @@ public class SupabaseClientHelper {
         }
         return authNetworkUtils;
     }
+
+    public static String getApiKey() {
+        return API_KEY;
+    }
 }
