@@ -1,19 +1,24 @@
 package com.example.coursemate.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.example.coursemate.NetworkUtils;
 import com.example.coursemate.R;
+import com.example.coursemate.SearchActivity;
+import com.example.coursemate.StudentCourseListActivity;
 import com.example.coursemate.SupabaseClientHelper;
 
 import org.json.JSONArray;
@@ -23,7 +28,7 @@ public class FragmentDashboard extends Fragment {
 
     private static final String TAG = "FragmentDashboard";
 
-    private TextView tvWelcome;
+    private TextView tvWelcome, tv_see_all, tv2_course_search;
 
     @Nullable
     @Override
@@ -32,11 +37,23 @@ public class FragmentDashboard extends Fragment {
 
         // Khởi tạo TextView
         tvWelcome = view.findViewById(R.id.tv_welcome);
-
+        tv_see_all = view.findViewById(R.id.tv_see_all);
+        tv2_course_search = view.findViewById(R.id.tv2_course_search);
         // Lấy thông tin từ SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE);
         String partnerId = sharedPreferences.getString("partner_id", null);
         String username = sharedPreferences.getString("username", "Unknown User");
+
+        // Xử lý sự kiện khi click vào "Xem tất cả"
+        tv_see_all.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), StudentCourseListActivity.class);
+            startActivity(intent);
+        });
+
+        tv2_course_search.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), SearchActivity.class);
+            startActivity(intent);
+        });
 
         if (partnerId != null) {
             fetchPartnerAndDisplayName(partnerId, username);
@@ -45,8 +62,6 @@ public class FragmentDashboard extends Fragment {
             Toast.makeText(requireContext(), "Không tìm thấy partner_id trong SharedPreferences", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Không tìm thấy partner_id trong SharedPreferences. Username: " + username);
         }
-
-
         return view;
     }
 

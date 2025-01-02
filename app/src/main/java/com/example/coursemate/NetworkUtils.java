@@ -2,6 +2,7 @@ package com.example.coursemate;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -314,6 +315,32 @@ public class NetworkUtils {
             } catch (Exception e) {
                 Log.e("NetworkUtils", "Error in updatePassword: ", e);
             }
+        });
+    }
+
+    private void fetchRegisteredCourses(String studentId) {
+        String query = "select=registration_id,course_id,course_name,course_description,payment_status,amount,registration_date" +
+                "&student_id=eq." + studentId;
+
+        SupabaseClientHelper.getNetworkUtils().select("CourseRegistration", query).thenAccept(response -> {
+            if (response != null && !response.isEmpty()) {
+                try {
+                    JSONArray registrations = new JSONArray(response);
+                    for (int i = 0; i < registrations.length(); i++) {
+                        JSONObject registration = registrations.getJSONObject(i);
+                        String courseName = registration.getString("course_name");
+                        String paymentStatus = registration.getString("payment_status");
+                        Log.d("FetchCourses", "Course: " + courseName + ", Status: " + paymentStatus);
+                    }
+                } catch (Exception e) {
+                    Log.e("FetchCourses", "Error parsing response", e);
+                }
+            } else {
+                Log.e("FetchCourses", "No data found for studentId: " + studentId);
+            }
+        }).exceptionally(throwable -> {
+            Log.e("FetchCourses", "Error fetching registered courses", throwable);
+            return null;
         });
     }
 

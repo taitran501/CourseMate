@@ -1,16 +1,21 @@
-// TeacherScheduleActivity.java
 package com.example.coursemate.teacher;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursemate.R;
+import com.example.coursemate.SupabaseClientHelper;
+import com.example.coursemate.adapter.TeacherScheduleAdapter;
 import com.example.coursemate.model.Schedule;
-import com.example.coursemate.model.Course;
-import com.example.coursemate.model.Classroom;
-import com.example.coursemate.adapter.ScheduleAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,51 +23,82 @@ import java.util.List;
 public class TeacherScheduleActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewTeacherSchedule;
-    private ScheduleAdapter scheduleAdapter;
+    private TeacherScheduleAdapter scheduleAdapter;
     private List<Schedule> scheduleList;
+
+    private static final String TAG = "TeacherSchedule";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_schedule);
 
-        // Khởi tạo RecyclerView
+        // Initialize RecyclerView
         recyclerViewTeacherSchedule = findViewById(R.id.recyclerViewTeacherSchedule);
         recyclerViewTeacherSchedule.setLayoutManager(new LinearLayoutManager(this));
 
-        // Khởi tạo danh sách Schedule
+        // Initialize schedule list and adapter
         scheduleList = new ArrayList<>();
-
-        // Khởi tạo Adapter
-        scheduleAdapter = new ScheduleAdapter(scheduleList, this);
+        scheduleAdapter = new TeacherScheduleAdapter(this, scheduleList);
         recyclerViewTeacherSchedule.setAdapter(scheduleAdapter);
 
-//        // Tải dữ liệu mẫu
-//        loadSampleData();
+        // Fetch teacher schedules
+        fetchTeacherSchedules();
     }
 
-//    private void loadSampleData() {
-//        // Tạo các đối tượng Course mẫu
-//        Course course1 = new Course(1, "Lập trình Android", "Khóa học Android cơ bản", 30, "ongoing", "2024-09-01", "2024-12-31");
-//        Course course2 = new Course(2, "Cơ sở dữ liệu", "Khóa học cơ sở dữ liệu nâng cao", 25, "ongoing", "2024-09-15", "2024-12-15");
-//        Course course3 = new Course(3, "Lập trình Web", "Khóa học lập trình Web cơ bản", 20, "open", "2024-10-01", "2025-01-31");
-//
-//        // Tạo các đối tượng Classroom mẫu
-//        Classroom classroom1 = new Classroom(1, "A101", 30, 15);
-//        Classroom classroom2 = new Classroom(2, "B202", 25, 12);
-//        Classroom classroom3 = new Classroom(3, "C303", 20, 10);
-//
-//        // Tạo các đối tượng Schedule mẫu
-//        Schedule schedule1 = new Schedule(1, "1", 8.0f, 10.0f, course1, classroom1); // Thứ Hai 8:00 - 10:00
-//        Schedule schedule2 = new Schedule(2, "3", 14.5f, 16.5f, course2, classroom2); // Thứ Tư 14:30 - 16:30
-//        Schedule schedule3 = new Schedule(3, "5", 9.0f, 11.0f, course3, classroom3); // Thứ Sáu 9:00 - 11:00
-//
-//        // Thêm các Schedule vào danh sách
-//        scheduleList.add(schedule1);
-//        scheduleList.add(schedule2);
-//        scheduleList.add(schedule3);
-//
-//        // Cập nhật Adapter
-//        scheduleAdapter.notifyDataSetChanged();
-//    }
+    private void fetchTeacherSchedules() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
+        String teacherId = sharedPreferences.getString("user_id", null);
+
+        if (teacherId == null) {
+            Toast.makeText(this, "Không tìm thấy thông tin giáo viên. Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String rpcUrl = SupabaseClientHelper.getNetworkUtils().getBaseUrl() + "rpc/get_teacher_schedule";
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("teacher_id", teacherId);
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating request body", e);
+            return;
+        }
+
+        SupabaseClientHelper.getNetworkUtils().post(rpcUrl, requestBody).thenAccept(response -> {
+            if (response != null && !response.isEmpty()) {
+                try {
+                    JSONArray scheduleArray = new JSONArray(response);
+                    List<Schedule> fetchedSchedules = new ArrayList<>();
+
+                    for (int i = 0; i < scheduleArray.length(); i++) {
+                        JSONObject scheduleObject = scheduleArray.getJSONObject(i);
+                        Schedule schedule = new Schedule(
+                                scheduleObject.getString("course_name"),
+                                scheduleObject.getString("day"),
+                                scheduleObject.getString("start_time"),
+                                scheduleObject.getString("end_time"),
+                                scheduleObject.optString("classroom_name", "Unknown Room")
+                        );
+                        fetchedSchedules.add(schedule);
+                    }
+
+                    runOnUiThread(() -> {
+                        scheduleList.clear();
+                        scheduleList.addAll(fetchedSchedules);
+                        scheduleAdapter.notifyDataSetChanged();
+                    });
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Lỗi phân tích dữ liệu lịch dạy", e);
+                    runOnUiThread(() -> Toast.makeText(this, "Lỗi khi xử lý dữ liệu từ máy chủ.", Toast.LENGTH_SHORT).show());
+                }
+            } else {
+                runOnUiThread(() -> Toast.makeText(this, "Không tìm thấy lịch dạy nào.", Toast.LENGTH_SHORT).show());
+            }
+        }).exceptionally(throwable -> {
+            Log.e(TAG, "Lỗi khi fetch dữ liệu từ Supabase", throwable);
+            runOnUiThread(() -> Toast.makeText(this, "Lỗi kết nối đến máy chủ.", Toast.LENGTH_SHORT).show());
+            return null;
+        });
+    }
 }

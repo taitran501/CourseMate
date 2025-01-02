@@ -20,6 +20,7 @@ import com.example.coursemate.PaymentActivity;
 import com.example.coursemate.R;
 import com.example.coursemate.SupabaseClientHelper;
 import com.example.coursemate.fragment.StudentDashboardActivity;
+import com.example.coursemate.teacher.TeacherDashboardActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -132,7 +133,11 @@ public class Login extends AppCompatActivity {
             } else if ("student".equals(role)) {
                 intentRole = new Intent(Login.this, StudentDashboardActivity.class);
                 Log.d(TAG, "Chuyển hướng đến màn hình student");
-            } else {
+            } else if ("teacher".equals(role)) {
+                intentRole = new Intent(Login.this, TeacherDashboardActivity.class);
+                Log.d(TAG, "Chuyển hướng đến màn hình teacher");
+            }
+            else {
                 String message = "Vai trò không hợp lệ";
                 runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
                 Log.d(TAG, message);
@@ -198,6 +203,39 @@ public class Login extends AppCompatActivity {
         editor.apply();
 
         Log.d(TAG, "Đã lưu thông tin user session: username=" + username + ", role=" + role + ", partner_id=" + partnerId);
+
+        // Lấy user_id từ bảng User sau khi lưu username
+        fetchAndSaveUserId(username);
     }
+
+    private void fetchAndSaveUserId(String username) {
+        String query = "select=id&username=eq." + username;
+
+        SupabaseClientHelper.getNetworkUtils().select("User", query).thenAccept(response -> {
+            if (response != null && !response.isEmpty()) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    if (jsonArray.length() > 0) {
+                        String userId = jsonArray.getJSONObject(0).getString("id");
+
+                        SharedPreferences sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("user_id", userId); // Lưu user_id vào SharedPreferences
+                        editor.apply();
+
+                        Log.d(TAG, "Đã lưu user_id: " + userId);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error parsing user_id", e);
+                }
+            } else {
+                Log.e(TAG, "Không tìm thấy user_id cho username: " + username);
+            }
+        }).exceptionally(throwable -> {
+            Log.e(TAG, "Lỗi khi lấy user_id", throwable);
+            return null;
+        });
+    }
+
 
 }

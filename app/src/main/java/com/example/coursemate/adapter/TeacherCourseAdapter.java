@@ -4,9 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursemate.R;
@@ -16,28 +16,29 @@ import java.util.List;
 
 public class TeacherCourseAdapter extends RecyclerView.Adapter<TeacherCourseAdapter.TeacherCourseViewHolder> {
 
-    private Context context;
-    private List<Course> courseList;
+    private final Context context;
+    private final List<Course> courseList;
 
     public TeacherCourseAdapter(Context context, List<Course> courseList) {
         this.context = context;
         this.courseList = courseList;
     }
 
+    @NonNull
     @Override
-    public TeacherCourseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TeacherCourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_teacher_course, parent, false);
         return new TeacherCourseViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(TeacherCourseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TeacherCourseViewHolder holder, int position) {
         Course course = courseList.get(position);
-        holder.ivCourseIcon.setImageResource(course.getIconResource());
-        holder.tvCourseName.setText(course.getName());
-        holder.tvCourseStatus.setText(course.getStatus());
-        holder.tvCourseDates.setText("Từ " + course.getStartDate() + " đến " + course.getEndDate());
-        // Bạn có thể thêm các thông tin khác nếu cần
+
+        // Hiển thị thông tin khóa học
+        holder.tvCourseName.setText(course.getName()); // Tên khóa học
+        holder.tvCourseStatus.setText("Trạng thái: " + course.getStatus()); // Trạng thái khóa học
+        holder.tvCourseDates.setText(course.getStartDate() + " - " + course.getEndDate()); // Ngày bắt đầu và kết thúc
     }
 
     @Override
@@ -45,33 +46,14 @@ public class TeacherCourseAdapter extends RecyclerView.Adapter<TeacherCourseAdap
         return courseList.size();
     }
 
-    class TeacherCourseViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivCourseIcon;
+    static class TeacherCourseViewHolder extends RecyclerView.ViewHolder {
         TextView tvCourseName, tvCourseStatus, tvCourseDates;
 
-        public TeacherCourseViewHolder(View itemView) {
+        public TeacherCourseViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivCourseIcon = itemView.findViewById(R.id.ivTeacherCourseIcon);
-            tvCourseName = itemView.findViewById(R.id.tvTeacherCourseName);
-            tvCourseStatus = itemView.findViewById(R.id.tvTeacherCourseStatus);
-            tvCourseDates = itemView.findViewById(R.id.tvTeacherCourseDates);
-
-            // Thiết lập sự kiện click nếu cần (ví dụ: mở chi tiết khóa học)
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Xử lý khi click vào item
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        Course clickedCourse = courseList.get(position);
-                        // Mở Activity chi tiết khóa học hoặc thực hiện hành động khác
-                        // Ví dụ:
-                        // Intent intent = new Intent(context, TeacherCourseDetailActivity.class);
-                        // intent.putExtra("courseId", clickedCourse.getId());
-                        // context.startActivity(intent);
-                    }
-                }
-            });
+            tvCourseName = itemView.findViewById(R.id.tvTeacherCourseName); // Tên khóa học
+            tvCourseStatus = itemView.findViewById(R.id.tvTeacherCourseStatus); // Trạng thái khóa học
+            tvCourseDates = itemView.findViewById(R.id.tvTeacherCourseDates); // Ngày bắt đầu và kết thúc
         }
     }
 }

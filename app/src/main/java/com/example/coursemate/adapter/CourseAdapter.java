@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.coursemate.R;
 import com.example.coursemate.model.Course;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
@@ -52,4 +54,12 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             tvCourseTime = itemView.findViewById(R.id.course_time);
         }
     }
+
+    // CourseAdapter.java
+    public void updateData(ArrayList<Course> newCourses) {
+        this.courseList.clear();
+        this.courseList.addAll(newCourses);
+        notifyDataSetChanged();
+    }
+
 }

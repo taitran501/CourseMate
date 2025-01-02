@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import android.content.Intent;
 
+import java.util.Locale;
+
 public class CourseDetailMainPage extends AppCompatActivity {
 
     private TextView courseNameTextView, courseDescriptionTextView, courseSlotTextView, teacherNameTextView, coursePriceTextView;
@@ -26,7 +28,7 @@ public class CourseDetailMainPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail_mainpage);
 
-        // Initialize Views
+
         courseNameTextView = findViewById(R.id.courseNameTextView);
         courseDescriptionTextView = findViewById(R.id.courseDescriptionTextView);
         courseSlotTextView = findViewById(R.id.courseSlotTextView);
@@ -81,15 +83,15 @@ public class CourseDetailMainPage extends AppCompatActivity {
             if (response != null && !response.isEmpty()) {
                 Log.d(TAG, "API Response: " + response);
                 try {
-                    // Chuyển từ JSONArray thay vì JSONObject
+                    // Parse JSON array response
                     JSONArray coursesArray = new JSONArray(response);
                     if (coursesArray.length() > 0) {
-                        JSONObject course = coursesArray.getJSONObject(0); // Lấy phần tử đầu tiên của mảng
+                        JSONObject course = coursesArray.getJSONObject(0);
                         String courseName = course.optString("course_name", "No Name");
                         String courseDescription = course.optString("course_description", "No Description");
                         int courseSlot = course.optInt("max_students", 0);
                         String teacherName = course.optString("teacher_name", "Unknown Teacher");
-                        double coursePrice = course.optDouble("course_price", 0.0);
+                        long coursePrice = course.optLong("course_price", 0L); // Sử dụng optLong để đảm bảo kiểu dữ liệu long
 
                         updateUI(courseName, courseDescription, courseSlot, teacherName, coursePrice);
                     } else {
@@ -107,7 +109,7 @@ public class CourseDetailMainPage extends AppCompatActivity {
         });
     }
 
-    private void updateUI(String courseName, String courseDescription, int courseSlot, String teacherName, double coursePrice) {
+    private void updateUI(String courseName, String courseDescription, int courseSlot, String teacherName, long coursePrice) {
         runOnUiThread(() -> {
             Log.d(TAG, "Updating UI with course details");
             courseNameTextView.setText(courseName);
@@ -118,7 +120,7 @@ public class CourseDetailMainPage extends AppCompatActivity {
         });
     }
 
-    private String formatCurrency(double amount) {
-        return String.format("%,.0f", amount).replace(",", ".");
+    private String formatCurrency(long amount) {
+        return String.format("%,d", amount).replace(",", ".");
     }
 }

@@ -1,5 +1,6 @@
 package com.example.coursemate.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.coursemate.NetworkUtils;
 import com.example.coursemate.R;
 import com.example.coursemate.SupabaseClientHelper;
 import com.example.coursemate.adapter.ScheduleAdapter;
@@ -25,9 +25,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.concurrent.CompletableFuture;
+import java.util.Locale;
 
 public class FragmentSchedule extends Fragment {
 
@@ -54,140 +52,78 @@ public class FragmentSchedule extends Fragment {
 
         // Initialize CalendarView
         calendarView = view.findViewById(R.id.calendar_view);
-        calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> fetchCoursesForDate(year, month, dayOfMonth));
+        calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> fetchStudentSchedule(year, month, dayOfMonth));
 
         return view;
     }
 
-    private void fetchCoursesForDate(int year, int month, int dayOfMonth) {
+    private String formatTime(String time) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+            return outputFormat.format(inputFormat.parse(time));
+        } catch (Exception e) {
+            return time; // Nếu xảy ra lỗi, trả về thời gian gốc
+        }
+    }
+
+    private void fetchStudentSchedule(int year, int month, int dayOfMonth) {
         scheduleList.clear();
-        scheduleAdapter.notifyDataSetChanged(); // Clear RecyclerView immediately
+        scheduleAdapter.notifyDataSetChanged();
 
-        int dayOfWeek = (dayOfMonth % 7); // Calculate day of the week
-        String scheduleQuery = "select=id,day,start_time,end_time,course_id,classroom_id&day=eq." + dayOfWeek;
+        String userId = getUserId(); // Lấy user_id từ SharedPreferences
+        if (userId == null) {
+            Log.e(TAG, "User ID is null. Please log in again.");
+            return;
+        }
 
-        NetworkUtils networkUtils = SupabaseClientHelper.getNetworkUtils();
-
-        networkUtils.select("Schedule", scheduleQuery).thenAccept(response -> {
+        String rpcUrl = SupabaseClientHelper.getNetworkUtils().getBaseUrl() + "rpc/get_student_schedule";
+        Log.d(TAG, "RPC URL: " + rpcUrl);
+        JSONObject requestBody = new JSONObject();
+        try {
+            String selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
+            requestBody.put("student_id", userId);
+            requestBody.put("selected_date", selectedDate);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error creating request body", e);
+            return;
+        }
+        Log.d(TAG, "Fetching student schedule for date: " + requestBody.toString());
+        SupabaseClientHelper.getNetworkUtils().post(rpcUrl, requestBody).thenAccept(response -> {
             if (response != null && !response.isEmpty()) {
                 try {
-                    JSONArray scheduleArray = new JSONArray(response);
-                    if (scheduleArray.length() == 0) {
+                    JSONArray resultArray = new JSONArray(response);
+                    if (resultArray.length() == 0) {
                         Log.d(TAG, "No schedules found for the selected date.");
-                        scheduleList.clear();
-                        getActivity().runOnUiThread(() -> scheduleAdapter.notifyDataSetChanged());
-                        return;
                     }
-
-                    for (int i = 0; i < scheduleArray.length(); i++) {
-                        JSONObject scheduleObject = scheduleArray.getJSONObject(i);
-
-                        String startTime = scheduleObject.optString("start_time", "N/A");
-                        String endTime = scheduleObject.optString("end_time", "N/A");
-                        String courseId = scheduleObject.optString("course_id");
-                        String classroomId = scheduleObject.optString("classroom_id");
-
-                        fetchCourseAndTeacher(networkUtils, courseId, classroomId, startTime, endTime, year, month, dayOfMonth);
+                    scheduleList.clear();
+                    for (int i = 0; i < resultArray.length(); i++) {
+                        JSONObject obj = resultArray.getJSONObject(i);
+                        Schedule schedule = new Schedule(
+                                obj.optString("course_name"),
+                                obj.optString("teacher_name"),
+                                formatTime(obj.optString("start_time")),
+                                formatTime(obj.optString("end_time")),
+                                obj.optString("classroom_name", "Unknown Room")
+                        );
+                        scheduleList.add(schedule);
                     }
+                    getActivity().runOnUiThread(() -> scheduleAdapter.notifyDataSetChanged());
                 } catch (JSONException e) {
-                    Log.e(TAG, "Error parsing Schedule: ", e);
+                    Log.e(TAG, "Error parsing student schedule: ", e);
                 }
             } else {
-                Log.d(TAG, "No schedules found for the selected date.");
-                scheduleList.clear();
-                getActivity().runOnUiThread(() -> scheduleAdapter.notifyDataSetChanged());
+                Log.d(TAG, "Empty or invalid response received from the server.");
             }
+        }).exceptionally(throwable -> {
+            Log.e(TAG, "Failed to fetch student schedule", throwable);
+            return null;
         });
+
     }
 
-    private void fetchCourseAndTeacher(NetworkUtils networkUtils, String courseId, String classroomId, String startTime, String endTime, int year, int month, int dayOfMonth) {
-        String courseQuery = "select=name,teacher_id,end_date&id=eq." + courseId;
-
-        networkUtils.select("Course", courseQuery).thenAccept(courseResponse -> {
-            if (courseResponse != null && !courseResponse.isEmpty()) {
-                try {
-                    JSONObject courseObject = new JSONArray(courseResponse).getJSONObject(0);
-                    String courseName = courseObject.optString("name", "No Course Name");
-                    String teacherId = courseObject.optString("teacher_id");
-                    String endDate = courseObject.optString("end_date");
-
-                    if (isDateAfterEndDate(year, month, dayOfMonth, endDate)) {
-                        Log.d(TAG, "Selected date is after course end date. Skipping.");
-                        return;
-                    }
-
-                    fetchTeacherAndClassroom(networkUtils, teacherId, classroomId, courseName, startTime, endTime);
-                } catch (JSONException e) {
-                    Log.e(TAG, "Error parsing Course: ", e);
-                }
-            }
-        });
-    }
-
-    private void fetchTeacherAndClassroom(NetworkUtils networkUtils, String teacherId, String classroomId, String courseName, String startTime, String endTime) {
-        String userQuery = "select=partner_id&id=eq." + teacherId; // Query partner_id from User table
-        String classroomQuery = "select=name&id=eq." + classroomId;
-
-        CompletableFuture<String> userFuture = networkUtils.select("User", userQuery);
-        CompletableFuture<String> classroomFuture = networkUtils.select("Classroom", classroomQuery);
-
-        CompletableFuture.allOf(userFuture, classroomFuture).thenRun(() -> {
-            try {
-                String teacherName = "Unknown Teacher";
-                String classroomName = "Unknown Room";
-
-                // Get partner_id from User table
-                if (userFuture.get() != null && !userFuture.get().isEmpty()) {
-                    JSONArray userArray = new JSONArray(userFuture.get());
-                    if (userArray.length() > 0) {
-                        JSONObject userObject = userArray.getJSONObject(0);
-                        String partnerId = userObject.optString("partner_id");
-
-                        // Query Partner to get teacherName
-                        String partnerQuery = "select=name&id=eq." + partnerId;
-                        String partnerResponse = networkUtils.select("Partner", partnerQuery).get();
-                        if (partnerResponse != null && !partnerResponse.isEmpty()) {
-                            JSONArray partnerArray = new JSONArray(partnerResponse);
-                            if (partnerArray.length() > 0) {
-                                JSONObject partnerObject = partnerArray.getJSONObject(0);
-                                teacherName = partnerObject.optString("name", "Unknown Teacher");
-                            }
-                        }
-                    }
-                }
-
-                // Get classroomName from Classroom table
-                if (classroomFuture.get() != null && !classroomFuture.get().isEmpty()) {
-                    JSONArray classroomArray = new JSONArray(classroomFuture.get());
-                    if (classroomArray.length() > 0) {
-                        JSONObject classroomObject = classroomArray.getJSONObject(0);
-                        classroomName = classroomObject.optString("name", "Unknown Room");
-                    }
-                }
-
-                // Create Schedule object and add to the list
-                Schedule schedule = new Schedule(courseName, teacherName, startTime, endTime, classroomName);
-                scheduleList.add(schedule);
-
-                // Update RecyclerView
-                getActivity().runOnUiThread(() -> scheduleAdapter.notifyDataSetChanged());
-
-            } catch (Exception e) {
-                Log.e(TAG, "Error combining Teacher and Classroom: ", e);
-            }
-        });
-    }
-
-    private boolean isDateAfterEndDate(int year, int month, int day, String endDate) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date selectedDate = new GregorianCalendar(year, month, day).getTime();
-            Date courseEndDate = sdf.parse(endDate);
-
-            return selectedDate.after(courseEndDate);
-        } catch (Exception e) {
-            Log.e(TAG, "Error parsing date: ", e);
-            return false;
-        }
+    private String getUserId() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_session", getActivity().MODE_PRIVATE);
+        return sharedPreferences.getString("user_id", null); // Trả về user_id từ SharedPreferences
     }
 }

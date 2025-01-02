@@ -1,0 +1,42 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <!-- Tên khóa học -->
+    <TextView
+        android:id="@+id/course_name_student"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên khóa học"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="1" />
+
+    <!-- Mô tả khóa học -->
+    <TextView
+        android:id="@+id/course_description_student"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mô tả khóa học"
+        android:textSize="16sp"
+        android:textColor="@android:color/darker_gray"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_marginTop="4dp" />
+
+    <!-- Ngày đăng ký -->
+    <TextView
+        android:id="@+id/course_registration_date_student"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ngày đăng ký: 2025-01-12"
+        android:textSize="14sp"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

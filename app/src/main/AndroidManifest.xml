@@ -79,9 +79,9 @@
         <activity
             android:name=".course.CourseDetailActivity"
             android:exported="true"/>
-<!--        <activity-->
-<!--            android:name=".teacher.TeacherDashboardActivity"-->
-<!--            android:exported="true"/>-->
+        <activity
+            android:name=".teacher.TeacherDashboardActivity"
+            android:exported="true"/>
         <activity
             android:name=".teacher.TeacherCourseListActivity"
             android:exported="true"/>
@@ -97,5 +97,15 @@
         <activity
             android:name=".PaymentActivity"
             android:exported="true"/>
+        <activity
+            android:name=".StudentCourseListActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".fragment.FragmentSetting"
+            android:exported="true"/>
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="true"/>
+
     </application>
 </manifest>

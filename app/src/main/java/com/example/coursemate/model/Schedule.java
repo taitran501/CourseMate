@@ -37,4 +37,8 @@ public class Schedule {
     public String getClassroomName() {
         return classroomName;
     }
+
+    public String getDay() {
+        return day;
+    }
 }
