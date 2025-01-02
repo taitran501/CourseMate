@@ -37,6 +37,17 @@ public class Course {
         this.endDate = endDate;
     }
 
+    public Course(String id, String teacherId, String name, int iconResource, String description, int maxStudents, String status, String startDate, String endDate) {
+        this.id = id;
+        this.name = name;
+        this.iconResource = iconResource;
+        this.description = description;
+        this.maxStudents = maxStudents;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     // Constructor tối giản (phục vụ trường hợp chỉ có tên và iconResource)
     public Course(String name, int iconResource, String description, String price, int maxStudents) {
         this.name = name;
@@ -67,9 +78,11 @@ public class Course {
         this.endDate = endDate;
     }
 
-    public Course(String id, String name) {
-        this.id = id;
-        this.name = name;
+
+    // Constructor cho search course trong student dashboard
+    public Course(String courseName, String courseDescription) {
+        this.name = courseName;
+        this.description = courseDescription;
     }
 
     // Constructor cho schedule của student
@@ -109,8 +122,6 @@ public class Course {
         this.name = name;
         this.description = description;
     }
-
-
 
     // Getters và Setters cho tất cả các thuộc tính
     public String getId() {
@@ -193,10 +204,10 @@ public class Course {
         this.price = price;
     }
 
-    public String getStartTime() { return startTime; }
-    public void setStartTime(String startTime) { this.startTime = startTime; }
-
-    public String getEndTime() { return endTime; }
-    public void setEndTime(String endTime) { this.endTime = endTime; }
-
+    public String getStartTime() {
+        return startDate;
+    }
+    public String getEndTime() {
+        return endDate;
+    }
 }

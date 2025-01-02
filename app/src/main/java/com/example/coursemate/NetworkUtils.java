@@ -78,6 +78,8 @@ public class NetworkUtils {
     public CompletableFuture<String> select(String table, String query) {
         return CompletableFuture.supplyAsync(() -> {
             try {
+
+
                 // Tạo URL với truy vấn
                 URL url = new URL(baseUrl + table + "?" + query);
 
@@ -94,9 +96,12 @@ public class NetworkUtils {
                     connection.setRequestProperty(entry.getKey(), entry.getValue());
                     Log.d("NetworkUtils", "Header: " + entry.getKey() + " = " + entry.getValue());
                 }
+                connection.setRequestProperty("Content-Type", "application/json");
+
                 Log.d("NetworkUtils", "Headers set");
+
                 // Kiểm tra phản hồi
-                Thread.sleep(2000);
+//                Thread.sleep(1000);
                 int responseCode = connection.getResponseCode();
                 Log.d("NetworkUtils", "Response code: " + responseCode);
                 if (responseCode == HttpURLConnection.HTTP_OK) {
