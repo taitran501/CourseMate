@@ -22,4 +22,12 @@
 
     <!-- Màu cho các liên kết và văn bản nhấn mạnh -->
     <color name="colorLink">#1E88E5</color> <!-- Màu xanh cho liên kết "Forgot Password?" và "Sign up" -->
+
+<!--    Mau cho barChar-->
+    <color name="barColor1">#FF6F61</color> <!-- Red -->
+    <color name="barColor2">#6A5ACD</color> <!-- Blue -->
+    <color name="barColor3">#FFD700</color> <!-- Gold -->
+    <color name="barColor4">#32CD32</color> <!-- Green -->
+    <color name="barColor5">#FF4500</color> <!-- Orange -->
+
 </resources>

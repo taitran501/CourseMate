@@ -25,6 +25,16 @@ public class Course {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+    public Course(String id, String teacherId, String name, int iconResource, String description, int maxStudents, String status, String startDate, String endDate) {
+        this.id = id;
+        this.name = name;
+        this.iconResource = iconResource;
+        this.description = description;
+        this.maxStudents = maxStudents;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     // Constructor tối giản (phục vụ trường hợp chỉ có tên và iconResource)
     public Course(String name, int iconResource, String description, String price, int maxStudents) {
@@ -92,6 +102,7 @@ public class Course {
         this.description = description;
         this.maxStudents = maxStudents;
     }
+
 
     // Getters và Setters cho tất cả các thuộc tính
     public String getId() {
