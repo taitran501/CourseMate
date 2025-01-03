@@ -1,16 +1,14 @@
 package com.example.coursemate.model;
 
-import java.util.Date;
-
 public class Notification {
     private int id;
     private String message;
     private int courseId;
     private String status; // 'new' or 'checked'
-    private Date createdAt;
+    private String createdAt; // Lưu dưới dạng chuỗi yyyy-MM-dd
 
     // Constructor đầy đủ
-    public Notification(int id, String message, int courseId, String status, Date createdAt) {
+    public Notification(int id, String message, int courseId, String status, String createdAt) {
         this.id = id;
         this.message = message;
         this.courseId = courseId;
@@ -18,15 +16,12 @@ public class Notification {
         this.createdAt = createdAt;
     }
 
-    // Constructor không có id (sử dụng khi thêm mới)
-    public Notification(String message, int courseId, String status, Date createdAt) {
+    // Constructor không có id
+    public Notification(String message, int courseId, String status, String createdAt) {
         this.message = message;
         this.courseId = courseId;
         this.status = status;
         this.createdAt = createdAt;
-    }
-
-    public Notification(String message, String id, String aNew, Date createdAt) {
     }
 
     // Getters và Setters
@@ -46,7 +41,7 @@ public class Notification {
         return status;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
@@ -66,7 +61,7 @@ public class Notification {
         this.status = status;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 }

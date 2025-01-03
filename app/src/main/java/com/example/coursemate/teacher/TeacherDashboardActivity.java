@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.coursemate.R;
 import com.example.coursemate.SupabaseClientHelper;
 import com.example.coursemate.auth.Login;
+import com.example.coursemate.notification.TeacherNotificationActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,7 +31,7 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         tvWelcome = findViewById(R.id.tvWelcome);
         layoutCourses = findViewById(R.id.layoutCourses);
         layoutSchedule = findViewById(R.id.layoutSchedule);
-//        layoutNotifications = findViewById(R.id.layoutNotifications);
+        layoutNotifications = findViewById(R.id.layoutNotifications);
         layoutLogout = findViewById(R.id.layoutLogout);
 
         // Lấy user_id từ SharedPreferences
@@ -55,10 +56,10 @@ public class TeacherDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-//        layoutNotifications.setOnClickListener(view -> {
-//            Intent intent = new Intent(TeacherDashboardActivity.this, TeacherNotificationActivity.class);
-//            startActivity(intent);
-//        });
+        layoutNotifications.setOnClickListener(view -> {
+            Intent intent = new Intent(TeacherDashboardActivity.this, TeacherNotificationActivity.class);
+            startActivity(intent);
+        });
 
         layoutLogout.setOnClickListener(view -> {
             // Xóa thông tin đăng nhập khỏi SharedPreferences

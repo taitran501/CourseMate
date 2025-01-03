@@ -46,7 +46,11 @@ public class TeacherList extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        // Thiết lập tiêu đề và nút quay lại
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Quản lý giáo viên");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

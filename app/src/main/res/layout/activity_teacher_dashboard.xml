@@ -68,31 +68,31 @@
             android:textColor="#333333"/>
     </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/layoutNotifications"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:padding="16dp"-->
-<!--        android:background="?android:attr/selectableItemBackground"-->
-<!--        android:gravity="center_vertical"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:elevation="2dp"-->
-<!--        android:clickable="true"-->
-<!--        android:focusable="true">-->
-<!--        <ImageView-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:src="@drawable/baseline_notifications_24"-->
-<!--            android:contentDescription="Notifications Icon"/>-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Thông báo"-->
-<!--            android:paddingLeft="16dp"-->
-<!--            android:textSize="18sp"-->
-<!--            android:textColor="#333333"/>-->
-<!--    </LinearLayout>-->
+    <LinearLayout
+        android:id="@+id/layoutNotifications"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp"
+        android:elevation="2dp"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/baseline_notifications_24"
+            android:contentDescription="Notifications Icon"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông báo"
+            android:paddingLeft="16dp"
+            android:textSize="18sp"
+            android:textColor="#333333"/>
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/layoutLogout"
         android:layout_width="match_parent"
