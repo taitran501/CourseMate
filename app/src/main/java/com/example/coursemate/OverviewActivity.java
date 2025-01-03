@@ -101,6 +101,7 @@ public class OverviewActivity extends AppCompatActivity {
             fetchTeacherFromAPI();
             fetchCourseFromAPI();
             fetchStudentFromAPI();
+            fetchRegistrationFromAPI();
             fetchCourseRegistrationsFromAPI();
             fetchAmountCourseRegistrationsFromAPI();
         } catch (ExecutionException e) {
@@ -262,6 +263,35 @@ public class OverviewActivity extends AppCompatActivity {
     }
 
 
+
+    private void fetchRegistrationFromAPI() throws ExecutionException, InterruptedException {
+        String query = "active=eq.true&payment_status=eq.unpaid";
+
+        CompletableFuture<String> future = SupabaseClientHelper.getNetworkUtils().select("CourseRegistration", query);
+        String url = SupabaseClientHelper.getNetworkUtils().getBaseUrl() + "CourseRegistration?" + query;
+        Log.d(TAG, "Request URL: " + url);
+        Log.d(TAG, "Supabase URL: " + SupabaseClientHelper.getNetworkUtils().getBaseUrl());
+        future.get();
+
+        future.thenAccept(response -> {
+            if (response != null) {
+                Log.d(TAG, "API Response: " + response);
+                try {
+
+                    TextView teacherTextView = findViewById(R.id.tv_registration_count);
+                    JSONArray jsonArray = new JSONArray(response);
+                    teacherTextView.setText("Số đăng ký: " + jsonArray.length());
+                } catch (Exception e) {
+                    Log.e(TAG, "Error parsing courses", e);
+                }
+            } else {
+                Log.e(TAG, "No response from API");
+            }
+        }).exceptionally(throwable -> {
+            Log.e(TAG, "Failed to fetch teachers", throwable);
+            return null;
+        });
+    }
     private void fetchTeacherFromAPI() throws ExecutionException, InterruptedException {
         String query = "select=role&role=eq.teacher&active=eq.true";
 

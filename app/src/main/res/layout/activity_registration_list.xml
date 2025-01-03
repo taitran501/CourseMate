@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/toolbar_layout" />
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/form_create_teacher"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/toolbar"-->
+<!--        android:orientation="vertical"-->
+<!--        android:padding="16dp">-->
+
+
+<!--        <EditText-->
+<!--            android:id="@+id/etEmail"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Email"-->
+<!--            android:inputType="textEmailAddress"-->
+<!--            android:background="@drawable/edittext_border"-->
+<!--            android:padding="12dp"-->
+<!--            android:textSize="10sp"-->
+<!--            android:drawablePadding="10dp" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/etFullName"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Họ và tên"-->
+<!--            android:inputType="textPersonName"-->
+<!--            android:background="@drawable/edittext_border"-->
+<!--            android:padding="12dp"-->
+<!--            android:textSize="10sp"-->
+<!--            android:layout_marginTop="8dp" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/etPhoneNumber"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Số điện thoại"-->
+<!--            android:inputType="phone"-->
+<!--            android:background="@drawable/edittext_border"-->
+<!--            android:padding="12dp"-->
+<!--            android:textSize="10sp"-->
+<!--            android:layout_marginTop="8dp" />-->
+
+
+<!--        <Button-->
+<!--            android:id="@+id/btnSignUp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Đăng ký"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:backgroundTint="@color/colorPrimary"-->
+<!--            android:padding="12dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_marginTop="8dp" />-->
+
+
+<!--    </LinearLayout>-->
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registration List"
+        android:textSize="35dp"
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/tv_teacher_header"
+        android:gravity="center"/>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/list"
+    android:layout_below="@+id/tv_teacher_header">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Course Name"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="190000"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="approve"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="reject"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+</LinearLayout>
+</RelativeLayout>
