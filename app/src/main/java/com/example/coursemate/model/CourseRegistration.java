@@ -4,13 +4,25 @@ import java.util.Date;
 
 public class CourseRegistration {
     private int id;                 // ID của việc đăng ký
+    private String registrationId;                 // ID của việc đăng ký
     private int studentId;          // ID của sinh viên
+    private String studentName;
     private int courseId;           // ID của khóa học
+    private String courseName;
     private String paymentStatus;   // Trạng thái thanh toán: 'unpaid', 'paid', 'rejected'
     private double amount;          // Số tiền thanh toán
     private Date registrationDate;  // Ngày đăng ký
+    private String date;
 
     // Constructor đầy đủ
+    public CourseRegistration(String registrationId, String studentName, String courseName, String paymentStatus, double amount, String registrationDate) {
+        this.registrationId = registrationId;
+        this.studentName = studentName;
+        this.courseName = courseName;
+        this.paymentStatus = paymentStatus;
+        this.amount = amount;
+        this.date = registrationDate;
+    }
     public CourseRegistration(int id, int studentId, int courseId, String paymentStatus, double amount, Date registrationDate) {
         this.id = id;
         this.studentId = studentId;
