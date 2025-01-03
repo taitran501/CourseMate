@@ -9,15 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursemate.R;
-import com.example.coursemate.model.Course;
+import com.example.coursemate.model.Schedule1;
 
 import java.util.List;
 
 public class StudentCourseDashboardAdapter extends RecyclerView.Adapter<StudentCourseDashboardAdapter.CourseViewHolder> {
 
-    private final List<Course> courseList;
+    private final List<Schedule1> courseList;
 
-    public StudentCourseDashboardAdapter(List<Course> courseList) {
+    public StudentCourseDashboardAdapter(List<Schedule1> courseList) {
         this.courseList = courseList;
     }
 
@@ -25,15 +25,15 @@ public class StudentCourseDashboardAdapter extends RecyclerView.Adapter<StudentC
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_course_student_dashboard, parent, false); // Sửa lại đúng tên file layout
+                .inflate(R.layout.item_course_student_dashboard, parent, false); // Đảm bảo layout tồn tại
         return new CourseViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-        Course course = courseList.get(position);
+        Schedule1 course = courseList.get(position);
 
-        holder.courseName.setText(course.getName());
+        holder.courseName.setText(course.getCourseName());
         holder.courseDescription.setText(course.getDescription() != null ? course.getDescription() : "Không có mô tả");
         holder.courseDate.setText("Ngày: " + course.getStartDate() + " - " + course.getEndDate());
         holder.courseTime.setText("Thời gian: " + course.getStartTime() + " - " + course.getEndTime());

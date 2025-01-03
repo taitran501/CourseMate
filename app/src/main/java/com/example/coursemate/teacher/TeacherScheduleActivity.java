@@ -65,6 +65,7 @@ public class TeacherScheduleActivity extends AppCompatActivity {
         }
 
         SupabaseClientHelper.getNetworkUtils().post(rpcUrl, requestBody).thenAccept(response -> {
+            Log.d(TAG, "Raw Supabase Response: " + response); // Log toàn bộ phản hồi
             if (response != null && !response.isEmpty()) {
                 try {
                     JSONArray scheduleArray = new JSONArray(response);
@@ -72,9 +73,14 @@ public class TeacherScheduleActivity extends AppCompatActivity {
 
                     for (int i = 0; i < scheduleArray.length(); i++) {
                         JSONObject scheduleObject = scheduleArray.getJSONObject(i);
+                        Log.d(TAG, "Fetched schedule JSON: " + scheduleObject.toString());
+
+                        String day = scheduleObject.optString("day", "Không rõ");
+                        Log.d(TAG, "Parsed day value: " + day);
+
                         Schedule schedule = new Schedule(
                                 scheduleObject.getString("course_name"),
-                                scheduleObject.getString("day"),
+                                day, // Truyền giá trị "day"
                                 scheduleObject.getString("start_time"),
                                 scheduleObject.getString("end_time"),
                                 scheduleObject.optString("classroom_name", "Unknown Room")

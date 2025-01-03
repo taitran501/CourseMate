@@ -11,13 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.coursemate.R;
 import com.example.coursemate.SupabaseClientHelper;
+import com.example.coursemate.auth.Login;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class TeacherDashboardActivity extends AppCompatActivity {
 
     private TextView tvWelcome;
-    private LinearLayout layoutCourses, layoutSchedule, layoutNotifications;
+    private LinearLayout layoutCourses, layoutSchedule, layoutNotifications, layoutLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,8 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         tvWelcome = findViewById(R.id.tvWelcome);
         layoutCourses = findViewById(R.id.layoutCourses);
         layoutSchedule = findViewById(R.id.layoutSchedule);
-        layoutNotifications = findViewById(R.id.layoutNotifications);
+//        layoutNotifications = findViewById(R.id.layoutNotifications);
+        layoutLogout = findViewById(R.id.layoutLogout);
 
         // Lấy user_id từ SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
@@ -56,7 +59,22 @@ public class TeacherDashboardActivity extends AppCompatActivity {
 //            Intent intent = new Intent(TeacherDashboardActivity.this, TeacherNotificationActivity.class);
 //            startActivity(intent);
 //        });
+
+        layoutLogout.setOnClickListener(view -> {
+            // Xóa thông tin đăng nhập khỏi SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
+            // Quay về màn hình đăng nhập
+            Intent intent = new Intent(TeacherDashboardActivity.this, Login.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            Toast.makeText(this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+        });
     }
+
 
     private void fetchTeacherName(String userId) {
         String query = "select=partner_id(id,name)&id=eq." + userId;

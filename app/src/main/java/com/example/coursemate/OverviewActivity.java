@@ -346,6 +346,4 @@ public class OverviewActivity extends AppCompatActivity {
             return null;
         });
     }
-
-
 }

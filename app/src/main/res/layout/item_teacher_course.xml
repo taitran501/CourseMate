@@ -13,7 +13,7 @@
         android:id="@+id/ivTeacherCourseIcon"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_course_icon"
+        android:src="@drawable/ic_course_icon_2"
         android:contentDescription="Course Icon"
         android:layout_gravity="center_vertical" />
 

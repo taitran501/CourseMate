@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coursemate.R;
 import com.example.coursemate.SupabaseClientHelper;
-import com.example.coursemate.adapter.ScheduleAdapter;
-import com.example.coursemate.model.Schedule;
+import com.example.coursemate.adapter.StudentScheduleAdapter;
+import com.example.coursemate.model.Schedule2;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,8 +31,8 @@ public class FragmentSchedule extends Fragment {
 
     private CalendarView calendarView;
     private RecyclerView recyclerView;
-    private ScheduleAdapter scheduleAdapter;
-    private ArrayList<Schedule> scheduleList;
+    private ArrayList<Schedule2> scheduleList;
+    private StudentScheduleAdapter scheduleAdapter;
 
     private static final String TAG = "FragmentSchedule";
 
@@ -47,7 +47,7 @@ public class FragmentSchedule extends Fragment {
 
         // Initialize schedule list and adapter
         scheduleList = new ArrayList<>();
-        scheduleAdapter = new ScheduleAdapter(scheduleList, getContext());
+        scheduleAdapter = new StudentScheduleAdapter(scheduleList, getContext());
         recyclerView.setAdapter(scheduleAdapter);
 
         // Initialize CalendarView
@@ -99,7 +99,7 @@ public class FragmentSchedule extends Fragment {
                     scheduleList.clear();
                     for (int i = 0; i < resultArray.length(); i++) {
                         JSONObject obj = resultArray.getJSONObject(i);
-                        Schedule schedule = new Schedule(
+                        Schedule2 schedule = new Schedule2(
                                 obj.optString("course_name"),
                                 obj.optString("teacher_name"),
                                 formatTime(obj.optString("start_time")),

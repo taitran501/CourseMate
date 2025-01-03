@@ -1,6 +1,7 @@
 package com.example.coursemate.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,8 @@ public class TeacherScheduleAdapter extends RecyclerView.Adapter<TeacherSchedule
     public void onBindViewHolder(@NonNull TeacherScheduleViewHolder holder, int position) {
         Schedule schedule = scheduleList.get(position);
 
-        holder.tvDay.setText("Ngày: " + schedule.getDay());
+        Log.d("TeacherScheduleAdapter", "Day passed to getDayLabel: " + schedule.getDay());
+        holder.tvDay.setText("Ngày: " + getDayLabel(schedule.getDay()));
         holder.tvTime.setText("Thời gian: " + schedule.getStartTime() + " - " + schedule.getEndTime());
         holder.tvCourseName.setText(schedule.getCourseName());
         holder.tvClassroom.setText("Phòng: " + schedule.getClassroomName());
@@ -57,4 +59,14 @@ public class TeacherScheduleAdapter extends RecyclerView.Adapter<TeacherSchedule
             tvClassroom = itemView.findViewById(R.id.tvTeacherScheduleClassroom);
         }
     }
+
+    private String getDayLabel(String day) {
+        if (day == null || day.isEmpty()) {
+            Log.d("getDayLabel", "Day value is null or empty");
+            return "Không rõ"; // Giá trị mặc định nếu null
+        }
+        Log.d("getDayLabel", "Mapped day: " + day);
+        return day; // Trả về giá trị trực tiếp
+    }
+
 }
