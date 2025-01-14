@@ -66,8 +66,17 @@ public class OverviewActivity extends AppCompatActivity {
         View buttonTeacherList = findViewById(R.id.button_teacher_list);
         View buttonCourseList = findViewById(R.id.button_course_list);
         View buttonStudentList = findViewById(R.id.button_student_list);
+        View buttonReList = findViewById(R.id.button_registration_list);
 
         // Sự kiện click cho nút Teacher List
+        buttonReList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Chuyển đến TeacherListActivity
+                Intent intent = new Intent(OverviewActivity.this, RegistrationList.class);
+                startActivity(intent);
+            }
+        });
         buttonTeacherList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

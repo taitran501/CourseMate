@@ -49,6 +49,11 @@ public class RegistrationList extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Thiết lập tiêu đề và nút quay lại trên Toolbar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Duyệt học phí");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +88,7 @@ public class RegistrationList extends AppCompatActivity {
     }
 
     private void fetchRegistrationFromAPI() throws ExecutionException, InterruptedException {
-        String query = "select=Course(name),amount,User(Partner(name))&active=eq.true&payment_status=eq.unpaid";
+        String query = "select=id,Course(name),amount,User(Partner(name))&active=eq.true&payment_status=eq.unpaid";
 
         CompletableFuture<String> future = SupabaseClientHelper.getNetworkUtils().select("CourseRegistration", query);
         future.get();
@@ -166,11 +171,37 @@ public class RegistrationList extends AppCompatActivity {
     }
 
     private void handleApprove(String courseRegistrationId) {
+        String query = "id=eq."+courseRegistrationId;
+        String jsonBody = "{\"payment_status\": \"paid\"}";
+        CompletableFuture<Void> future = SupabaseClientHelper.getNetworkUtils().update("CourseRegistration", query, jsonBody);
+        try {
+            future.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
         Toast.makeText(this, "Approved ID: " + courseRegistrationId, Toast.LENGTH_SHORT).show();
         // Additional logic here
     }
 
     private void handleReject(String courseRegistrationId) {
+        String query = "id=eq."+courseRegistrationId;
+        String jsonBody = "{\"active\": \"false\"}";
+        CompletableFuture<Void> future = SupabaseClientHelper.getNetworkUtils().update("CourseRegistration", query, jsonBody);
+        try {
+            future.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
         Toast.makeText(this, "Rejected ID: " + courseRegistrationId, Toast.LENGTH_SHORT).show();
         // Additional logic here
     }

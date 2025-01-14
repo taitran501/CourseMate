@@ -55,7 +55,7 @@ public class TeacherCourseListActivity extends AppCompatActivity {
             return;
         }
 
-        String query = "select=name,status,start_date,end_date&teacher_id=eq." + teacherId;
+        String query = "select=name,status,start_date,end_date&teacher_id=eq." + teacherId + "&order=status.desc";
         SupabaseClientHelper.getNetworkUtils().select("Course", query).thenAccept(response -> {
             if (response != null && !response.isEmpty()) {
                 Log.d("FETCH_RESPONSE", response); // Log toàn bộ JSON trả về
